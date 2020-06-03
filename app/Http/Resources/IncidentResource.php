@@ -23,6 +23,7 @@ class IncidentResource extends JsonResource
         if ($this->link_5) $links[] = $this->link_5;
         if ($this->link_6) $links[] = $this->link_6;
         if ($this->link_7) $links[] = $this->link_7;
+
         return [
             'id' => $this->id,
             'pr_id' => $this->pr_id,
@@ -33,6 +34,10 @@ class IncidentResource extends JsonResource
             'description' => $this->description,
             'links' => $links,
             'data' => $this->data,
+            'geocoding' => [
+                'lat' => $this->lat,
+                'long' => $this->long,
+            ]
         ];
     }
 }
