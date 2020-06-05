@@ -1,6 +1,6 @@
 ## 8:46 police brutality :clock830: :rotating_light:
 
-8 minutes is the length of time associated with the killing of George Floyd, who died in police custody after police officer Derek Chauvin knelt on his neck for roughly eight minutes.
+8 minutes and 46 seconds is the length of time associated with the killing of George Floyd, who died in police custody after police officer Derek Chauvin knelt on his neck for roughly eight minutes.
 
 This repo provides and API and archives acts of assault by public servants to American Citizens during non-violent acts of protest. 
 
