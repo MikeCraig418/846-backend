@@ -14,9 +14,16 @@ class IncidentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return IncidentResource::collection(Incident::all());
+
+        if ($request->include == 'evidence') {
+            $incidents = Incident::with('evidence.video')->get();
+        } else {
+            $incidents = Incident::all();
+        }
+
+        return IncidentResource::collection($incidents);
     }
 
     /**
