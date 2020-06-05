@@ -1,18 +1,58 @@
-## 846-backend
+## 8:46 police brutality :clock830: :rotating_light:
 
-## Demo
-JSON Restful API
+8 minutes is the length of time associated with the killing of George Floyd, who died in police custody after police officer Derek Chauvin knelt on his neck for roughly eight minutes.
 
-HTTP GET https://846policebrutality.b-cdn.net/api/incidents
-### Front-end Repository
-The frontend repository can be found here: https://github.com/mnlmaier/846-frontend
+This repo provides and API and archives acts of assault by public servants to American Citizens during non-violent acts of protest. 
+
+#### API
+
+**List all catalog Incidents of Police Assault**
+ 
+`GET` https://api.846policebrutality.com/api/incidents
+
+List all Incidents and include Evidence (such as Video)
+
+`GET` https://api.846policebrutality.com/api/incidents?include=evidence
+
+#### Reference Repos
+
+This repo aggregates data from a variety of source, most notably:
+ 
+ [2020PB/police-brutality](https://github.com/2020PB/police-brutality) - The JSON data feed made available
+ 
+
+[mnlmaier/846-frontend](https://github.com/mnlmaier/846-frontend) - A front-end app to visual this data
+
+#### About This Project
+
+This project was inspired by  [2020PB/police-brutality](https://github.com/2020PB/police-brutality). Therefore:
+
+This repository exists to accumulate and contextualize evidence of police brutality during the 2020 George Floyd protests.
+
+Our goal in doing this is to assist journalists, politicians, prosecutors, activists and concerned citizens who can use the evidence accumulated here for political campaigns, news reporting, public education and prosecution of criminal police officers.
+
+If you wish to contribute, please start by reading the [contribution guidelines](https://github.com/2020PB/police-brutality).
+
+---
+
+#### More about \*this\* repo
+
+* This project does not condone acts aggression of any parties
+* This project is meant to enable others to share their voice and stand-up against acts of violence by public service
+* This project intends to fight censorship by encouraging all to get involved and mirror this data, download the media, and fight for progress
+* This project is not anti-police
+* This project is a public work dedicated to all of humanity, regardless of race, creed, or borders. 
 
 ## Roadmap
 
 Incidents Endpoint
 - [x] `HTTP GET /api/incidents` - list all incidents
+- [x] `HTTP GET /api/incidents?include=evidence` - Include video evidence
 - [ ] `HTTP GET /api/incidents?xx` - Filter by city, state, date range
 - [ ] *Any requested end-points?*
+
+Video
+- [x] Artisan command to pull videos from Incident websites
 
 Geolocation
 - [x] Artisan command to update lat/long for all Incidents
