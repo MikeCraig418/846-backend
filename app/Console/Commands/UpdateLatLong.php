@@ -13,7 +13,7 @@ class UpdateLatLong extends Command
      *
      * @var string
      */
-    protected $signature = 'incidents:update-lat-long';
+    protected $signature = 'pb:update-lat-long';
 
     /**
      * The console command description.
