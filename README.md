@@ -1,6 +1,6 @@
 ## 8:46 police brutality :clock830: :rotating_light:
 
-8 minutes is the length of time associated with the killing of George Floyd, who died in police custody after police officer Derek Chauvin knelt on his neck for roughly eight minutes.
+8 minutes and 46 seconds is the length of time associated with the killing of George Floyd, who died in police custody after police officer Derek Chauvin knelt on his neck for roughly eight minutes.
 
 This repo provides and API and archives acts of assault by public servants to American Citizens during non-violent acts of protest. 
 
@@ -13,6 +13,16 @@ This repo provides and API and archives acts of assault by public servants to Am
 List all Incidents and include Evidence (such as Video)
 
 `GET` https://api.846policebrutality.com/api/incidents?include=evidence
+
+#### Data Visualization
+
+**Map**
+
+https://frontend-1750f.web.app/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
+
+**Filter by State**
+
+https://2020policebrutality.netlify.app/ - Uses parent repo's data feed, real time.
 
 #### Reference Repos
 
