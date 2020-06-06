@@ -29,6 +29,6 @@ class Evidence extends Model
 
     public function video()
     {
-        return $this->hasMany('App\Models\Video');
+        return $this->hasMany('App\Models\Video', 'evidence_url', 'url');
     }
 }

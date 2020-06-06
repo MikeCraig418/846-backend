@@ -28,6 +28,6 @@ class Video extends Model
 
     public function evidence()
     {
-        return $this->belongsTo('App\Models\Evidence');
+        return $this->belongsTo('App\Models\Evidence', 'url', 'evidence_url');
     }
 }
