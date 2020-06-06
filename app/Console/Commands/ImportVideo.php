@@ -41,7 +41,15 @@ class ImportVideo extends Command
     public function handle()
     {
         $count = 0;
-        foreach (Evidence::whereNull('video')->get() as $evidence) {
+        foreach (Evidence::whereNull('video_status')->get() as $evidence) {
+
+            echo " trying... " . $evidence->id;
+            if ($video = Video::where('evidence_url', $evidence->url)->first()) {
+                $evidence->video_status = "ok";
+                $evidence->save();
+                echo "skipping...";
+                continue;
+            }
 
             $url = $evidence->url;
             $response = Http::withHeaders([
@@ -50,6 +58,9 @@ class ImportVideo extends Command
             ])->get('https://getvideo.p.rapidapi.com/', [
                 'url' => $url,
             ]);
+
+            echo $response->body();
+            echo $response->status();
 
             if ($response = $response->json()) {
 
@@ -68,19 +79,18 @@ class ImportVideo extends Command
                     $video->thumbnail = $response['thumbnail'] ?? null;
                     $video->streams = $response['streams'] ?? [];
                     $video->meta = $response;
-                    $video->evidence_id = $evidence->id;
-                    $evidence->video = 'ok';
+                    $evidence->video_status = 'ok';
                     $video->save();
 
                 } else {
-                    $evidence->video = $response['message'];
+                    $evidence->video_status = $response['message'];
                 }
 
                 $evidence->save();
 
             }
 
-            if ($count++ > 40) exit;
+            if ($count++ > 100) exit;
         }
 
     }
