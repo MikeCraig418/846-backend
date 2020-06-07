@@ -10,9 +10,17 @@ This repo provides and API and archives acts of assault by public servants to Am
  
 `GET` https://api.846policebrutality.com/api/incidents
 
-List all Incidents and include Evidence (such as Video)
+**List all Incidents and include Evidence (such as Video)**
 
 `GET` https://api.846policebrutality.com/api/incidents?include=evidence
+
+**Show a Single Incident**
+
+`GET` https://api.846policebrutality.com/api/incidents/{id}
+
+You can also include the Evidence model:
+
+`GET` https://api.846policebrutality.com/api/incidents/{id}?include=evidence
 
 #### Data Visualization
 
@@ -23,6 +31,7 @@ https://frontend-1750f.web.app/ - Uses this API, currently slightly lagged as th
 **Filter by State**
 
 https://2020policebrutality.netlify.app/ - Uses parent repo's data feed, real time.
+
 
 #### Reference Repos
 
