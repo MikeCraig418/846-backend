@@ -7,6 +7,7 @@ use App\Models\Incident;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ImportIncidents extends Command
 {
@@ -49,7 +50,13 @@ class ImportIncidents extends Command
 
             foreach ($incidents['data'] as $row) {
 
+                if (!isset($row['name'])) {
+                    echo "--- missing data ---";
+                    print_r($row);
+                    continue;
+                }
                 $incident = new Incident();
+                $incident->pb_id = $row['id'] ?? 'no-id-' . Str::random(8);
                 $incident->state = $row['state'] ?? '';
                 $incident->city = $row['city'] ?? '';
                 $incident->title = $row['name'];
