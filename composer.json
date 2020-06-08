@@ -13,6 +13,7 @@
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^7.0",
+        "laravel/nova": "*",
         "laravel/tinker": "^2.0",
         "spatie/geocoder": "^3.8",
         "webpatser/laravel-uuid": "^3.0"
@@ -61,5 +62,11 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ]
 }
