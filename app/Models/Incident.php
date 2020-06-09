@@ -17,6 +17,17 @@ class Incident extends Model
         'geocoding'
     ];
 
+    protected $fillable = [
+        'pb_id',
+        'state',
+        'city',
+        'title',
+        'date',
+        'links',
+        'lat',
+        'long',
+    ];
+
     protected $hidden = [
         'link_1',
         'link_2',

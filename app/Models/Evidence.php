@@ -18,6 +18,11 @@ class Evidence extends Model
         'deleted_at'
     ];
 
+    protected $fillable = [
+        'url',
+        'incident_id',
+    ];
+
     protected $casts = [
         'video' => 'array',
     ];
