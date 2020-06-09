@@ -4,6 +4,8 @@
 
 This repo provides and API and archives acts of assault by public servants to American Citizens during non-violent acts of protest. 
 
+---------------------------
+
 #### API
 
 **List all catalog Incidents of Police Assault**
@@ -22,16 +24,21 @@ You can also include the Evidence model:
 
 `GET` https://api.846policebrutality.com/api/incidents/{id}?include=evidence
 
-#### Data Visualization
+---------------------------
+
+#### Data Visualization and Front-end Websites
 
 **Map**
 
-https://frontend-1750f.web.app/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
+https://846policebrutality.com/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
+
+https://policebrutality.me/ - Uses this API, shows incidents and videos/photos on map
 
 **Filter by State**
 
 https://2020policebrutality.netlify.app/ - Uses parent repo's data feed, real time.
 
+---------------------------
 
 #### Reference Repos
 
@@ -41,6 +48,8 @@ This repo aggregates data from a variety of source, most notably:
  
 
 [mnlmaier/846-frontend](https://github.com/mnlmaier/846-frontend) - A front-end app to visual this data
+
+---------------------------
 
 #### About This Project
 
