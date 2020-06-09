@@ -26,7 +26,7 @@ You can also include the Evidence model:
 
 **Map**
 
-https://frontend-1750f.web.app/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
+https://846policebrutality.com/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
 
 https://policebrutality.me/ - Uses this API, shows incidents and videos/photos on map
 
