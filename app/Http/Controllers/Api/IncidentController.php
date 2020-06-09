@@ -36,11 +36,20 @@ class IncidentController extends Controller
     public function index(Request $request)
     {
 
-        if ($request->include == 'evidence') {
-            $incidents = Incident::with('evidence.video')->get();
-        } else {
-            $incidents = Incident::all();
+        $filterBy = $request->filter;
+
+        $incidents = Incident::select('*');
+
+        foreach ($filterBy as $filter => $value) {
+            $incidents = $incidents->where($filter, $value);
         }
+
+        if ($request->include == 'evidence') {
+            $incidents = $incidents->with('evidence.video');
+        }
+
+        $incidents = $incidents->get();
+
 
         return IncidentResource::collection($incidents)->additional($this->meta);
     }
