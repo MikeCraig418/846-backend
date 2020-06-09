@@ -28,6 +28,8 @@ You can also include the Evidence model:
 
 https://frontend-1750f.web.app/ - Uses this API, currently slightly lagged as the parent data-feed doesn't include static ids
 
+https://policebrutality.me/ - Uses this API, shows incidents and videos/photos on map
+
 **Filter by State**
 
 https://2020policebrutality.netlify.app/ - Uses parent repo's data feed, real time.
