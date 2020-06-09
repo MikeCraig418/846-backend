@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LinkSubmissionApprovals extends Model
+class LinkSubmissionApproval extends Model
 {
     use Uuids;
     use SoftDeletes;
@@ -21,7 +21,11 @@ class LinkSubmissionApprovals extends Model
     protected $casts = [
     ];
 
-//    public function user() {
-//        return $this->belongsTo(User::class);
-//    }
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function link_submission() {
+        return $this->belongsTo(LinkSubmission::class);
+    }
 }
