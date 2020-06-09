@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aab1e9ed04148eb5d306fb0762a6e606",
+    "content-hash": "58f738fbbfa666f633ced4df6dd76146",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -57,6 +57,55 @@
                 "stack"
             ],
             "time": "2019-12-24T22:41:47+00:00"
+        },
+        {
+            "name": "benjaminhirsch/nova-slug-field",
+            "version": "1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomhatzer/nova-slug-field.git",
+                "reference": "207291988ea535d661e23b3f6cd33431cf9b739a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomhatzer/nova-slug-field/zipball/207291988ea535d661e23b3f6cd33431cf9b739a",
+                "reference": "207291988ea535d661e23b3f6cd33431cf9b739a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Benjaminhirsch\\NovaSlugField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Benjaminhirsch\\NovaSlugField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Hirsch",
+                    "email": "mail@benjaminhirsch.net",
+                    "homepage": "https://wwwbenjaminhirsch.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel Nova field to generate a slugs.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2019-07-05T07:23:36+00:00"
         },
         {
             "name": "brick/math",
@@ -2596,6 +2645,63 @@
                 "x509"
             ],
             "time": "2020-04-04T23:17:33+00:00"
+        },
+        {
+            "name": "pktharindu/nova-permissions",
+            "version": "v2.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pktharindu/nova-permissions.git",
+                "reference": "a6e30e779892f0382dd3759b90bfed73faad0981"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pktharindu/nova-permissions/zipball/a6e30e779892f0382dd3759b90bfed73faad0981",
+                "reference": "a6e30e779892f0382dd3759b90bfed73faad0981",
+                "shasum": ""
+            },
+            "require": {
+                "benjaminhirsch/nova-slug-field": "^1.2",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Pktharindu\\NovaPermissions\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pktharindu\\NovaPermissions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "P. K. Tharindu",
+                    "email": "pktharindu@outlook.com"
+                }
+            ],
+            "description": "Laravel Nova Grouped Permissions (ACL)",
+            "keywords": [
+                "Authentication",
+                "access control",
+                "acl",
+                "authorization",
+                "gates",
+                "laravel",
+                "nova",
+                "permissions",
+                "policies",
+                "roles",
+                "tool"
+            ],
+            "time": "2020-03-27T04:13:40+00:00"
         },
         {
             "name": "psr/container",
