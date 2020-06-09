@@ -79,10 +79,15 @@ class ImportVideo extends Command
                     $video->thumbnail = $response['thumbnail'] ?? null;
                     $video->streams = $response['streams'] ?? [];
                     $video->meta = $response;
+                    $video->evidence_url = $evidence->url;
                     $evidence->video_status = 'ok';
                     $video->save();
 
                 } else {
+                    $video = new Video();
+                    $video->title = $response['message'];
+                    $video->evidence_url = $evidence->url;
+                    $video->save();
                     $evidence->video_status = $response['message'];
                 }
 
@@ -90,7 +95,7 @@ class ImportVideo extends Command
 
             }
 
-            if ($count++ > 100) exit;
+            if ($count++ > 1000) exit;
         }
 
     }

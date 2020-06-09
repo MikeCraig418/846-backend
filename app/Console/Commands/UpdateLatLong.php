@@ -39,10 +39,7 @@ class UpdateLatLong extends Command
      */
     public function handle()
     {
-        foreach (Incident::all() as $incident) {
-
-            if ($incident->lat != "" && $incident->lon != "") continue;
-
+        foreach (Incident::where(['lat' => 0, 'long' => 0])->get() as $incident) {
             $response = Geocoder::getCoordinatesForAddress("{$incident->city}, {$incident->state}");;
             $incident->lat = $response['lat'];
             $incident->long = $response['lng'];

@@ -55,23 +55,30 @@ class ImportIncidents extends Command
                     print_r($row);
                     continue;
                 }
-                $incident = new Incident();
-                $incident->pb_id = $row['id'] ?? 'no-id-' . Str::random(8);
-                $incident->state = $row['state'] ?? '';
-                $incident->city = $row['city'] ?? '';
-                $incident->title = $row['name'];
-                $incident->date = ($this->isValidForCarbon($row['date'])) ? $row['date'] : '1900-01-01';
-                $incident->links = $row['links'];
-                $incident->lat = 0;
-                $incident->long = 0;
 
-                $incident->save();
+                $incident = Incident::updateOrCreate(
+                    [
+                        'pb_id' => $row['id'],
+                    ],
+                    [
+                        'state' => $row['state'] ?? '',
+                        'city' => $row['city'] ?? '',
+                        'title' => $row['name'],
+                        'date' => ($this->isValidForCarbon($row['date'])) ? $row['date'] : '1900-01-01',
+                        'links' => $row['links'],
+                    ]
+                );
 
                 foreach ($row['links'] as $link) {
-                    $evidence = new Evidence();
-                    $evidence->url = $link;
-                    $evidence->incident_id = $incident->id;
-                    $evidence->save();
+                    $evidence = Evidence::updateOrCreate(
+                        [
+                            'url' => $link,
+                        ],
+                        [
+                            'url' => $link,
+                            'incident_id' => $incident->id
+                        ]
+                    );
                 }
 
             }
