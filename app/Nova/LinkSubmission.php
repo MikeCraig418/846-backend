@@ -6,6 +6,8 @@ use App\Nova\Actions\ApproveSubmission;
 use App\Nova\Actions\BulkUploadLinks;
 use App\Nova\Actions\NeedsApprovers;
 use App\Nova\Actions\RejectSubmission;
+use App\Nova\Filters\ApprovalStatus;
+use App\Nova\Filters\LinkStatus;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\DateTime;
@@ -14,11 +16,12 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Pdmfc\NovaFields\ActionButton;
+use OptimistDigital\NovaNotesField\NotesField;
 
 class LinkSubmission extends Resource
 {
 
+    public static $perPageOptions = [200, 50, 100, 200, 1000];
 
     public static $defaultSort = ['created_at' => 'desc'];
 
@@ -66,12 +69,15 @@ class LinkSubmission extends Resource
             })->asHtml(),
             Text::make('Link Status')->sortable(),
             Text::make('Approval Status', function () {
-               return $this->approvalCountHelper($this->id);
+                return $this->approvalCountHelper($this->id);
             })->asHtml(),
 
             BelongsTo::make('Submitted By', 'user', User::class)->sortable()->hideFromIndex(),
             DateTime::make('Uploaded At', 'created_at')->sortable()->hideFromIndex(),
             KeyValue::make('Data'),
+
+            NotesField::make('Notes')
+                ->placeholder('Add a note'), // Optional
 
             HasMany::make('Approvals', 'link_submission_approvals', LinkSubmissionApproval::class)
         ];
@@ -96,7 +102,10 @@ class LinkSubmission extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new ApprovalStatus(),
+            new LinkStatus(),
+        ];
     }
 
     /**
@@ -128,9 +137,9 @@ class LinkSubmission extends Resource
                 ->confirmText('Are you sure you want to activate this user?')
                 ->confirmButtonText('Save')
                 ->cancelButtonText("Cancel")
-            ->canRun(function() {
-                return auth()->user()->hasPermissionTo('view link submissions');
-            })
+                ->canRun(function () {
+                    return auth()->user()->hasPermissionTo('view link submissions');
+                })
             ,
         ];
     }
@@ -151,14 +160,14 @@ class LinkSubmission extends Resource
     {
         $count = \App\Models\LinkSubmission::where('id', $id)
             ->withCount([
-            'link_submission_approvals_approved',
-            'link_submission_approvals_rejected'
-        ])
+                'link_submission_approvals_approved',
+                'link_submission_approvals_rejected'
+            ])
             ->first();
 
         $approved = $count->link_submission_approvals_approved_count ?? 0;
         $rejected = $count->link_submission_approvals_rejected_count ?? 0;
-        dump($count);
+
         $str = '';
         if ($approved > 0) {
             $str .= "👍{$approved}";
