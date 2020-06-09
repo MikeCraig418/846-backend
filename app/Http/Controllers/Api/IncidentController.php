@@ -36,7 +36,7 @@ class IncidentController extends Controller
     public function index(Request $request)
     {
 
-        $filterBy = $request->filter;
+        $filterBy = $request->filter ?? [];
 
         $incidents = Incident::select('*');
 
