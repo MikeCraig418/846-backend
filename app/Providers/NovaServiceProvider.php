@@ -76,7 +76,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function tools()
     {
-        return [];
+        return [
+            new \Pktharindu\NovaPermissions\NovaPermissions(),
+        ];
     }
 
     /**

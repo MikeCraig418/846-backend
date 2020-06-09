@@ -25,6 +25,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        foreach (config('nova-permissions.permissions') as $key => $permissions) {
+            Gate::define($key, function (User $user) use ($key) {
+                if ($this->nobodyHasAccess($key)) {
+                    return true;
+                }
+
+                return $user->hasPermissionTo($key);
+            });
+        }
+        
         //
     }
 }
