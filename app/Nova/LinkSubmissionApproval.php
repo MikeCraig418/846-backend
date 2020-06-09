@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -48,8 +49,11 @@ class LinkSubmissionApproval extends Resource
         return [
             DateTime::make('Created At'),
             BelongsTo::make('Link Submission'),
-            BelongsTo::make('User'),
-            Text::make('Disposition', 'status'),
+            BelongsTo::make('User')->exceptOnForms(),
+            Select::make('Disposition', 'status')->options([
+                'Approved' => 'Approved',
+                'Rejected' => 'Rejected',
+            ]),
             Textarea::make('Reason')->onlyOnForms(),
             Text::make('Reason', function() {
                 return wordwrap(str_replace("\n", "<br/>", $this->reason), 500);

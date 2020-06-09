@@ -40,7 +40,7 @@ return [
         'role_permission' => 'role_permission',
 
         'role_user' => 'role_user',
-        
+
         'users' => 'users',
     ],
 
@@ -51,6 +51,36 @@ return [
     */
 
     'permissions' => [
+        'view link submissions' => [
+            'display_name' => 'View link submissions',
+            'description'  => 'Can view link submissions',
+            'group'        => 'Link Submission',
+        ],
+
+//        'create link submissions' => [
+//            'display_name' => 'Create link submissions',
+//            'description'  => 'Can create link submissions',
+//            'group'        => 'Link Submission',
+//        ],
+
+        'upload link submissions' => [
+            'display_name' => 'Upload link submissions',
+            'description'  => 'Can upload link submissions',
+            'group'        => 'Link Submission',
+        ],
+
+        'edit link submissions' => [
+            'display_name' => 'Edit link submissions',
+            'description'  => 'Can edit link submissions',
+            'group'        => 'Link Submission',
+        ],
+
+        'delete link submissions' => [
+            'display_name' => 'Delete link submissions',
+            'description'  => 'Can delete link submissions',
+            'group'        => 'Link Submission',
+        ],
+
         'view users' => [
             'display_name' => 'View users',
             'description'  => 'Can view users',

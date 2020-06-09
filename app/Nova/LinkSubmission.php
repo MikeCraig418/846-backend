@@ -127,7 +127,11 @@ class LinkSubmission extends Resource
             (new NeedsApprovers())->showOnTableRow()
                 ->confirmText('Are you sure you want to activate this user?')
                 ->confirmButtonText('Save')
-                ->cancelButtonText("Cancel"),
+                ->cancelButtonText("Cancel")
+            ->canRun(function() {
+                return auth()->user()->hasPermissionTo('view link submissions');
+            })
+            ,
         ];
     }
 

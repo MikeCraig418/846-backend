@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\LinkSubmission;
+use App\Models\LinkSubmissionApproval;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class LinkSubmissionPolicy
+class LinkSubmissionApprovalPolicy
 {
     use HandlesAuthorization;
 
@@ -25,11 +25,12 @@ class LinkSubmissionPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\LinkSubmission  $linkSubmission
+     * @param  \App\LinkSubmissionApproval  $linkSubmissionApproval
      * @return mixed
      */
-    public function view(User $user, LinkSubmission $linkSubmission)
+    public function view(User $user, LinkSubmissionApproval $linkSubmissionApproval)
     {
+
         return $user->hasPermissionTo('view link submissions');
     }
 
@@ -41,54 +42,54 @@ class LinkSubmissionPolicy
      */
     public function create(User $user)
     {
-        return $user->hasPermissionTo('create link submissions');
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\LinkSubmission  $linkSubmission
+     * @param  \App\LinkSubmissionApproval  $linkSubmissionApproval
      * @return mixed
      */
-    public function update(User $user, LinkSubmission $linkSubmission)
+    public function update(User $user, LinkSubmissionApproval $linkSubmissionApproval)
     {
-        return $user->hasPermissionTo('edit link submissions');
+        return $linkSubmissionApproval->user_id === $user->id || $user->isAdmin;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\LinkSubmission  $linkSubmission
+     * @param  \App\LinkSubmissionApproval  $linkSubmissionApproval
      * @return mixed
      */
-    public function delete(User $user, LinkSubmission $linkSubmission)
+    public function delete(User $user, LinkSubmissionApproval $linkSubmissionApproval)
     {
-        return $user->hasPermissionTo('delete link submissions');
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\LinkSubmission  $linkSubmission
+     * @param  \App\LinkSubmissionApproval  $linkSubmissionApproval
      * @return mixed
      */
-    public function restore(User $user, LinkSubmission $linkSubmission)
+    public function restore(User $user, LinkSubmissionApproval $linkSubmissionApproval)
     {
-        return $user->hasPermissionTo('delete link submissions');
+        //
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\LinkSubmission  $linkSubmission
+     * @param  \App\LinkSubmissionApproval  $linkSubmissionApproval
      * @return mixed
      */
-    public function forceDelete(User $user, LinkSubmission $linkSubmission)
+    public function forceDelete(User $user, LinkSubmissionApproval $linkSubmissionApproval)
     {
-        return $user->hasPermissionTo('delete link submissions');
+        //
     }
 }
