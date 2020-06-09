@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "58f738fbbfa666f633ced4df6dd76146",
+    "content-hash": "26ec75608e65212ef5905109d68e4cc1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2306,6 +2306,62 @@
                 "serialize"
             ],
             "time": "2020-06-07T11:41:29+00:00"
+        },
+        {
+            "name": "optimistdigital/nova-notes-field",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/optimistdigital/nova-notes-field.git",
+                "reference": "706319aa3ee3701ee6b90c4bde349b2911a50517"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/optimistdigital/nova-notes-field/zipball/706319aa3ee3701ee6b90c4bde349b2911a50517",
+                "reference": "706319aa3ee3701ee6b90c4bde349b2911a50517",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^2.0.11 || ^3.0",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "OptimistDigital\\NovaNotesField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OptimistDigital\\NovaNotesField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tarvo Reinpalu",
+                    "email": "tarvoreinpalu@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Optimist Digital",
+                    "email": "info@optimistdigital.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "This Laravel Nova package adds a notes field to Nova's arsenal of fields.",
+            "keywords": [
+                "field",
+                "laravel",
+                "nova",
+                "optimistdigital"
+            ],
+            "time": "2020-05-25T13:01:46+00:00"
         },
         {
             "name": "owenmelbz/nova-radio-field",
