@@ -17,6 +17,7 @@
         "laravel/nova": "*",
         "laravel/tinker": "^2.0",
         "maatwebsite/excel": "^3.1",
+        "maatwebsite/laravel-nova-excel": "^1.2",
         "optimistdigital/nova-notes-field": "^1.5",
         "owenmelbz/nova-radio-field": "^0.0.5",
         "pktharindu/nova-permissions": "^2.1",

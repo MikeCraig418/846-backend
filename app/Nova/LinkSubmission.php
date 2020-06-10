@@ -16,6 +16,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Maatwebsite\LaravelNovaExcel\Actions\DownloadExcel;
 use OptimistDigital\NovaNotesField\NotesField;
 
 class LinkSubmission extends Resource
@@ -133,14 +134,22 @@ class LinkSubmission extends Resource
                 'label' => 'Bulk Upload Links',
                 'showOnIndexToolbar' => true
             ]),
+            (new DownloadExcel())->withMeta([
+                'detachedAction' => true,
+                'label' => 'Download All',
+                'showOnIndexToolbar' => true
+            ])
+                ->withHeadings()
+                ->allFields()->except('media_url'),
+//                ->only('submission_datetime_utc', 'submission_title', 'submission_media_url', 'submission_url'),
             (new NeedsApprovers())->showOnTableRow()
                 ->confirmText('Are you sure you want to activate this user?')
                 ->confirmButtonText('Save')
                 ->cancelButtonText("Cancel")
                 ->canRun(function () {
                     return auth()->user()->hasPermissionTo('view link submissions');
-                })
-            ,
+                }),
+
         ];
     }
 
