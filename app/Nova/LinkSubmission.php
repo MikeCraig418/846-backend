@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AdvancedDuplicateCheck;
 use App\Nova\Actions\ApproveSubmission;
 use App\Nova\Actions\BulkUploadLinks;
 use App\Nova\Actions\NeedsApprovers;
@@ -135,6 +136,11 @@ class LinkSubmission extends Resource
                 'label' => 'Bulk Upload Links',
                 'showOnIndexToolbar' => true
             ]),
+//            (new AdvancedDuplicateCheck())->withMeta([
+//                'detachedAction' => true,
+//                'label' => 'Advanced Duplicate Check',
+//                'showOnIndexToolbar' => true
+//            ])->confirmText('Running this script will perform advanced matching on Twitter and YouTube URLs. You should only do this one time after you perform a new bulk import.'),
             (new DownloadExcel())->withMeta([
                 'detachedAction' => true,
                 'label' => 'Download All',

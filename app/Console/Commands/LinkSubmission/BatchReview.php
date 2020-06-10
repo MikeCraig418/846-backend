@@ -51,7 +51,7 @@ class BatchReview extends Command
 
             foreach ($urls as $url) {
 
-                $this->info($url);
+//                $this->info($url);
 
                 $urlParts = parse_url($url);
 
@@ -92,11 +92,9 @@ class BatchReview extends Command
                 // Let's start looking for dupes!
                 //
 
-                // (1) The the pb2020 approved links
-
                 $checkModels = [
-                    'evidence' => ['model' => Evidence::select('*'), 'source' => 'PB2020 Data Feed'],
-//                    'reviewed_links' => ['model' => ReviewedLink::select('*'), 'source' => 'model'],
+                    'evidence' => ['model' => Evidence::select('*'), 'source' => 'PB2020 Data Feed'], // (1) The the pb2020 approved links
+                    'reviewed_links' => ['model' => ReviewedLink::select('*'), 'source' => 'model'],  // (2) other lists
                 ];
 
                 foreach ($checkModels as $key => $checkModel) {
@@ -119,7 +117,7 @@ class BatchReview extends Command
                         $linkSubmission->save();
                         break;
                     } else {
-                        echo $modelCount;
+//                        echo $modelCount;
                     }
                 }
 
