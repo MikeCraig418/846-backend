@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Incident;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Geocoder\Facades\Geocoder;
 
 class UpdateLatLong extends Command
@@ -39,12 +40,21 @@ class UpdateLatLong extends Command
      */
     public function handle()
     {
+        $modelUpdated = false;
+
         foreach (Incident::where(['lat' => 0, 'long' => 0])->get() as $incident) {
+            $modelUpdated = true;
+
             $response = Geocoder::getCoordinatesForAddress("{$incident->city}, {$incident->state}");;
             $incident->lat = $response['lat'];
             $incident->long = $response['lng'];
             $incident->save();
 
+        }
+
+        if ($modelUpdated) {
+            $this->info('Purging CDN Cache');
+            Artisan::call('cdn:purge-cache');
         }
     }
 }
