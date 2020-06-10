@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('pb:run-import')->everyMinute();
         $schedule->command('pb:import-video')->everyThirtyMinutes();
-        $schedule->command('cdn:purge-cache')->hourly();
+        $schedule->command('cdn:purge-cache')->everyFifteenMinutes();
     }
 
     /**
