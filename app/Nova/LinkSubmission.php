@@ -69,6 +69,7 @@ class LinkSubmission extends Resource
                 return $html;
             })->asHtml(),
             Text::make('Link Status')->sortable(),
+            Text::make('Link Status Ref')->onlyOnDetail(),
             Text::make('Approval Status', function () {
                 return $this->approvalCountHelper($this->id);
             })->asHtml(),
