@@ -2,24 +2,26 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Evidence;
+use App\Models\Incident;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class RunImport extends Command
+class RedoImport extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pb:run-import';
+    protected $signature = 'pb:redo-import';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import from Data Feed, Grab Geos';
+    protected $description = 'Truncate the incidents and evidence tables, then pb:run-import';
 
     /**
      * Create a new command instance.
@@ -38,11 +40,13 @@ class RunImport extends Command
      */
     public function handle()
     {
-        $this->info('pb:import-incidents');
-        Artisan::call('pb:import-incidents');
 
-        $this->info('pb:update-lat-long');
-        Artisan::call('pb:update-lat-long');
+        $this->info('Truncating tables...');
+        Incident::truncate();
+        Evidence::truncate();
+
+        $this->info('pb:run-import');
+        Artisan::call('pb:run-import');
 
         $this->info('✅ Done.');
     }
