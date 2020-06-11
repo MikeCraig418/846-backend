@@ -79,10 +79,6 @@
         },
         {
             "type": "path",
-            "url": "packages/949mac/link-submission-review"
-        },
-        {
-            "type": "path",
             "url": "packages/n949mac/link-submission-review"
         }
     ]
