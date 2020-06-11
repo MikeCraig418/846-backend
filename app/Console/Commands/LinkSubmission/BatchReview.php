@@ -6,6 +6,7 @@ use App\Models\Evidence;
 use App\Models\LinkSubmission;
 use App\Models\ReviewedLink;
 use Illuminate\Console\Command;
+use N949mac\LinkSubmissionReview\Facades\LinkSubmissionReview;
 
 class BatchReview extends Command
 {
@@ -44,83 +45,12 @@ class BatchReview extends Command
 
         foreach ($linkSubmissions as $linkSubmission) {
 
-            $urls = [
-                $linkSubmission->submission_media_url,
-                $linkSubmission->submission_url,
-            ];
+            $review = LinkSubmissionReview::setLinkSubmission($linkSubmission)->review();
 
-            foreach ($urls as $url) {
-
-//                $this->info($url);
-
-                $urlParts = parse_url($url);
-
-                $IdPattern = false;
-                $id = false;
-
-                $hosts = [];
-
-
-                if ($urlParts['host'] == 'twitter.com') {
-                    $IdPattern = '/([0-9]+)/m';
-
-                    $hosts = [
-                        'twitter.com'
-                    ];
-                } else if ($urlParts['host'] == 'youtube.com' || $urlParts['host'] == 'youtu.be') {
-                    $IdPattern = '/([0-9a-zA-Z\-_]+)/m';
-
-                    $hosts = [
-                        'youtube.com',
-                        'youtu.be',
-                    ];
-                }
-
-                if ($IdPattern) {
-
-                    preg_match_all($IdPattern, $url, $matches, PREG_SET_ORDER, 0);
-
-                    $id = $matches[0][0] ?? false;
-
-                    if (!$id) continue;
-                }
-
-                $hosts = array_unique($hosts);
-
-
-                //
-                // Let's start looking for dupes!
-                //
-
-                $checkModels = [
-                    'evidence' => ['model' => Evidence::select('*'), 'source' => 'PB2020 Data Feed'], // (1) The the pb2020 approved links
-                    'reviewed_links' => ['model' => ReviewedLink::select('*'), 'source' => 'model'],  // (2) other lists
-                ];
-
-                foreach ($checkModels as $key => $checkModel) {
-                    $model = $checkModel['model'];
-
-                    foreach ($hosts as $host) {
-                        if (!$id) {
-                            $model = $model->where('url', 'like', '%' . $host . '%' . $id . '$');
-                        } else
-                            $model = $model->where('url', 'like', '%' . $url . '%');
-                    }
-
-                    $modelCount = $model->count();
-
-                    $model = $model->first();
-
-                    if ($modelCount) {
-                        $linkSubmission->link_status = 'Duplicate';
-                        $linkSubmission->link_status_ref = $checkModel['source'] == 'model' ? $model->source : $checkModel['source'];
-                        $linkSubmission->save();
-                        break;
-                    } else {
-//                        echo $modelCount;
-                    }
-                }
-
+            if ($review->isDuplicate()) {
+                $linkSubmission->link_status = $review->getLinkStatus();
+                $linkSubmission->link_status_ref = $review->getLinkStatusRef();
+                $linkSubmission->save();
             }
 
 
