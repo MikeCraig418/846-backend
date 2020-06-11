@@ -1,0 +1,50 @@
+{
+  "name": "n949mac/link-submission-review",
+  "description": "A link submission review",
+  "license": "MIT",
+  "keywords": [
+    "link",
+    "submission",
+    "review"
+  ],
+  "type": "library",
+  "authors": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "illuminate/support": "^6.0|^7.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^4.0|^5.0",
+    "phpunit/phpunit": "^8.4|^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "N949mac\\LinkSubmissionReview\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "N949mac\\LinkSubmissionReview\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "phpunit": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "N949mac\\LinkSubmissionReview\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
