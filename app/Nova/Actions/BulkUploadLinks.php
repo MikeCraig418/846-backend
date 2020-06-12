@@ -3,6 +3,7 @@
 namespace App\Nova\Actions;
 
 use App\Imports\LinkSubmissionImport;
+use Brightspot\Nova\Tools\DetachedActions\DetachedAction;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,7 @@ use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\File;
 use Maatwebsite\Excel\Facades\Excel;
 
-class BulkUploadLinks extends Action
+class BulkUploadLinks extends DetachedAction
 {
     use InteractsWithQueue, Queueable;
 
@@ -24,14 +25,13 @@ class BulkUploadLinks extends Action
      * @param \Illuminate\Support\Collection $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields)
     {
         $pathinfo = pathinfo($fields->file->getClientOriginalName());
         if ($pathinfo['extension'] == 'csv') {
 
             Excel::import(new LinkSubmissionImport, $fields->file->store('uploads'), null, \Maatwebsite\Excel\Excel::CSV);
 
-            dump('csv');
 
         } else if ($pathinfo['extension'] == 'xlsx') {
 
@@ -41,6 +41,8 @@ class BulkUploadLinks extends Action
 
             return Action::danger('Invalid file type. Upload *.csv or *.xlsx files only.');
         }
+
+        return Action::message("Done!");
 
     }
 

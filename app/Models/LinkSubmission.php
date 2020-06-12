@@ -24,6 +24,7 @@ class LinkSubmission extends Model
         'data',
         'user_id',
         'link_status',
+        'link_status_ref',
     ];
 
     protected $casts = [

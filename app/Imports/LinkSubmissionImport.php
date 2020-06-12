@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\LinkSubmission;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use N949mac\LinkSubmissionReview\Facades\LinkSubmissionReview;
 
 class LinkSubmissionImport implements ToModel, WithHeadingRow
 {
@@ -26,17 +27,18 @@ class LinkSubmissionImport implements ToModel, WithHeadingRow
             $submission_url = $row['submission_url'];
         }
 
-        $submission_media_url = trim(strtolower($this->addhttp($submission_media_url)));
-        $submission_url = trim(strtolower($this->addhttp($submission_url)));
+        $review = LinkSubmissionReview::setUrls([
+            $submission_media_url,
+            $submission_url,
+        ])->review();
 
-        $existingLinkSubmission = LinkSubmission::where('submission_media_url', $submission_media_url)->first();
-
-        if ($existingLinkSubmission) {
+        $link_status_ref = "";
+        if ($review->isDuplicate()) {
             $link_status = 'Duplicate';
+            $link_status_ref = $review->getLinkStatusRef();
         } else {
             $link_status = 'First Seen';
         }
-
 
         return new LinkSubmission([
             'submission_datetime_utc' => $row['submission_datetime_utc'] ?? '1900-01-01',
@@ -46,12 +48,7 @@ class LinkSubmissionImport implements ToModel, WithHeadingRow
             'data' => $row,
             'user_id' => auth()->user()->id,
             'link_status' => $link_status,
+            'link_status_ref' => $link_status_ref,
         ]);
-    }
-    public function addhttp($url) {
-        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
-            $url = "https://" . $url;
-        }
-        return $url;
     }
 }
