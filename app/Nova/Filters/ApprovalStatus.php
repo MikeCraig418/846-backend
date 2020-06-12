@@ -26,14 +26,14 @@ class ApprovalStatus extends Filter
     {
 
         if ($value == 'Needs Approvers') {
-            return $query->with('link_submission_approvals_approved')->has('link_submission_approvals_approved', '<', 2);
+            return $query->with('link_submission_approvals_approved')->has('link_submission_approvals_approved', '<', 1);
         }
 
         if ($value == 'Approved') {
-            return $query->with('link_submission_approvals_approved')->has('link_submission_approvals_approved', '>=', 2);
+            return $query->with('link_submission_approvals_approved')->has('link_submission_approvals_approved', '>=', 1);
         }
         if ($value == 'Rejected') {
-            return $query->with('link_submission_approvals_rejected')->has('link_submission_approvals_rejected', '>=', 2);
+            return $query->with('link_submission_approvals_rejected')->has('link_submission_approvals_rejected', '>=', 1);
         }
         if ($value == 'Flag for Review') {
             return $query->with('link_submission_approvals_flagged')->has('link_submission_approvals_flagged', '>=', 1);
