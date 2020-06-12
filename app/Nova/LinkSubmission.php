@@ -61,7 +61,7 @@ class LinkSubmission extends Resource
     public function fields(Request $request)
     {
         return [
-            DateTime::make('Submission Date Time', 'submission_datetime_utc')->sortable(),
+            DateTime::make('Uploaded At', 'created_at')->sortable(),
             Text::make('Media Url', function () {
                 $html = "<div style='padding:10px 0;'><strong>{$this->submission_title}</strong> <br/>";
                 $html .= "<a href='{$this->submission_media_url}' target='_blank'>$this->submission_media_url</a> <br/>";
@@ -76,7 +76,6 @@ class LinkSubmission extends Resource
             })->asHtml(),
 
             BelongsTo::make('Submitted By', 'user', User::class)->sortable()->hideFromIndex(),
-            DateTime::make('Uploaded At', 'created_at')->sortable()->hideFromIndex(),
             KeyValue::make('Data'),
 
             NotesField::make('Notes')

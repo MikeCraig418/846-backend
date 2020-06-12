@@ -2,12 +2,14 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\MakeApiToken;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Nalingia\NovaSecretField\NovaSecretField;
 
 class User extends Resource
 {
@@ -65,6 +67,14 @@ class User extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
+            NovaSecretField::make('Api Token')
+                ->hideFromIndex()
+                ->canCopyToClipboard()
+            ->canSee(function() {
+                return $this->id == auth()->user()->id;
+            })
+            ,
+
             BelongsToMany::make('Roles', 'roles', \Pktharindu\NovaPermissions\Nova\Role::class),
         ];
     }
@@ -110,6 +120,8 @@ class User extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new MakeApiToken()
+        ];
     }
 }

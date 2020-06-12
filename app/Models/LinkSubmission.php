@@ -25,6 +25,7 @@ class LinkSubmission extends Model
         'user_id',
         'link_status',
         'link_status_ref',
+        'is_api_submission',
     ];
 
     protected $casts = [
