@@ -26,7 +26,7 @@ class ApprovalStatus extends Filter
     {
 
         if ($value == 'Needs Approvers') {
-            return $query->with('link_submission_approvals_approved')->has('link_submission_approvals_approved', '<', 1);
+            return $query->with('link_submission_approvals')->has('link_submission_approvals', '<', 1);
         }
 
         if ($value == 'Approved') {
