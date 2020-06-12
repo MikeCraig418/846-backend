@@ -37,7 +37,7 @@ class LinkSubmissionReview
     public function setUrls($urls = [])
     {
         foreach ($urls as $key=>$url) {
-            $url[$key] = trim(strtolower($this->addhttp($url)));
+            $urls[$key] = trim(strtolower($this->addhttp($url)));
         }
 
 
@@ -60,6 +60,7 @@ class LinkSubmissionReview
         $urls = $this->urls;
 
         foreach ($urls as $url) {
+//            echo "|" . $url . "|\n";
 
             $urlParts = parse_url($url);
 
@@ -70,15 +71,15 @@ class LinkSubmissionReview
 
 
             if ($urlParts['host'] == 'twitter.com') {
-                $IdPattern = '/([0-9]+)/m';
-
+                $IdPattern = '/([0-9]+)/';
+                $groupNum = 0;
                 $hosts = [
                     'twitter.com'
                 ];
 
             } else if ($urlParts['host'] == 'youtube.com' || $urlParts['host'] == 'youtu.be') {
-                $IdPattern = '/([0-9a-zA-Z\-_]+)/m';
-
+                $IdPattern = '/(\.be|\.com)\/([0-9a-zA-Z\-_]+)/';
+                $groupNum = 2;
                 $hosts = [
                     'youtube.com',
                     'youtu.be',
@@ -89,7 +90,7 @@ class LinkSubmissionReview
 
                 preg_match_all($IdPattern, $url, $matches, PREG_SET_ORDER, 0);
 
-                $id = $matches[0][0] ?? false;
+                $id = $matches[0][$groupNum] ?? false;
 
                 if (!$id) continue;
             }
@@ -105,6 +106,7 @@ class LinkSubmissionReview
 
             foreach ($checkModels as $key => $checkModel) {
 
+//                echo "======= $key =======\n";
                 if ($key == "link_submissions") {
 
                     $checkFields = [
@@ -132,12 +134,14 @@ class LinkSubmissionReview
                             if (!$id) {
                                 $model = $model->where($urlField, 'like', '%' . $host . '%' . $id . '$');
                             } else
+//                                echo "where($urlField, 'like', '%' . $host . '%' . $id . '$')\n";
                                 $model = $model->where($urlField, 'like', '%' . $url . '%');
                         } else {
 
                             if (!$id) {
                                 $model = $model->orWhere($urlField, 'like', '%' . $host . '%' . $id . '$');
                             } else
+//                                echo "orWhere($urlField, 'like', '%' . $host . '%' . $id . '$')\n";
                                 $model = $model->orWhere($urlField, 'like', '%' . $url . '%');
                         }
                     }
@@ -178,8 +182,11 @@ class LinkSubmissionReview
     }
 
     public function addhttp($url) {
-        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
-            $url = "https://" . $url;
+        if  ( $ret = parse_url($url) ) {
+            if ( !isset($ret["host"]) )
+            {
+                $url = "https://" . trim($url);
+            }
         }
         return $url;
     }

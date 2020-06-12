@@ -23,4 +23,4 @@ Route::get('incidents/{id}', '\App\Http\Controllers\Api\IncidentController@show'
 
 Route::get('legislators', '\App\Http\Controllers\Api\LegislatorController@index');
 
-//Route::post('link-submission', '\App\Http\Controllers\Api\LinkSubmissionController@store');
+Route::post('link-submission', '\App\Http\Controllers\Api\LinkSubmissionController@store');

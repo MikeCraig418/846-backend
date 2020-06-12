@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f9182f8158d28817faaa17c925c3917",
+    "content-hash": "3f6786da663b0dee82641f20ef546dd9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2283,6 +2283,47 @@
                 "review",
                 "submission"
             ]
+        },
+        {
+            "name": "nalingia/nova-secret-field",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nalingia/nova-secret-field.git",
+                "reference": "222823062ff6409e060e7ff8ad3ae9969038223d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nalingia/nova-secret-field/zipball/222823062ff6409e060e7ff8ad3ae9969038223d",
+                "reference": "222823062ff6409e060e7ff8ad3ae9969038223d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nalingia\\NovaSecretField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nalingia\\NovaSecretField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2020-05-05T17:43:56+00:00"
         },
         {
             "name": "nesbot/carbon",
