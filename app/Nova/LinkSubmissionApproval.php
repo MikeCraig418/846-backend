@@ -48,11 +48,12 @@ class LinkSubmissionApproval extends Resource
     {
         return [
             DateTime::make('Created At'),
-            BelongsTo::make('Link Submission'),
+            BelongsTo::make('Link Submission')->searchable(),
             BelongsTo::make('User')->exceptOnForms(),
             Select::make('Disposition', 'status')->options([
                 'Approved' => 'Approved',
                 'Rejected' => 'Rejected',
+                'Flag for Review' => 'Flag for Review',
             ]),
             Textarea::make('Reason')->onlyOnForms(),
             Text::make('Reason', function() {

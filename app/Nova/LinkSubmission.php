@@ -176,20 +176,35 @@ class LinkSubmission extends Resource
         $count = \App\Models\LinkSubmission::where('id', $id)
             ->withCount([
                 'link_submission_approvals_approved',
-                'link_submission_approvals_rejected'
+                'link_submission_approvals_rejected',
+                'link_submission_approvals_reason',
+                'link_submission_approvals_flagged',
             ])
             ->first();
 
         $approved = $count->link_submission_approvals_approved_count ?? 0;
         $rejected = $count->link_submission_approvals_rejected_count ?? 0;
+        $has_reason = $count->link_submission_approvals_reason_count ?? 0;
+        $flagged = $count->link_submission_approvals_flagged_count ?? 0;
 
-        $str = '';
+        $str = '<div style="font-size:14px; "><p style="margin-bottom: 10px">';
         if ($approved > 0) {
-            $str .= "👍{$approved}";
+            $str .= "👍 {$approved}";
         }
         if ($rejected > 0) {
-            $str .= "👎{$rejected}";
+            $str .= "👎 {$rejected}";
         }
+        $str .= "</p><p>";
+
+        if ($has_reason > 0) {
+            $str .= "📝 {$has_reason}";
+        }
+        if ($flagged > 0) {
+            $str .= "❗{$flagged}";
+        }
+
+        $str .= "</p></div>";
+
         return $str;
     }
 }

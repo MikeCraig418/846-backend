@@ -49,6 +49,7 @@ class NeedsApprovers extends Action
                 ->options([
                     'Approved' => 'Yes - Approve',
                     'Rejected' => 'No - Reject',
+                    'Flag for Review' => 'Flag for Review',
                 ])
                 ->default('Approved') // optional
                 ->stack() // optional (required to show hints)

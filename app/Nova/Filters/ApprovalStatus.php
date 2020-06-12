@@ -35,6 +35,9 @@ class ApprovalStatus extends Filter
         if ($value == 'Rejected') {
             return $query->with('link_submission_approvals_rejected')->has('link_submission_approvals_rejected', '>=', 2);
         }
+        if ($value == 'Flag for Review') {
+            return $query->with('link_submission_approvals_flagged')->has('link_submission_approvals_flagged', '>=', 1);
+        }
         if ($value == 'Controversial') {
             return $query->with('link_submission_approvals_rejected')
                 ->with('link_submission_approvals_approved')
@@ -60,6 +63,7 @@ class ApprovalStatus extends Filter
             'Approved' => 'Approved',
             'Rejected' => 'Rejected',
             'Controversial' => 'Controversial',
+            'Flag for Review' => 'Flag for Review',
             'All' => 'All',
         ];
     }

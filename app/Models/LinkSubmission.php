@@ -57,6 +57,17 @@ class LinkSubmission extends Model
         return $this->hasMany(LinkSubmissionApproval::class)->where('status', 'Rejected');
     }
 
+    public function link_submission_approvals_flagged()
+    {
+        return $this->hasMany(LinkSubmissionApproval::class)->where('status',  'Flag for Review');
+    }
+
+    public function link_submission_approvals_reason()
+    {
+        return $this->hasMany(LinkSubmissionApproval::class)->where('reason', '!=', '');
+    }
+
+
 
     public function getApprovedCountAttribute()
     {
