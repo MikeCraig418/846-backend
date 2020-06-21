@@ -41,15 +41,19 @@ class BatchReview extends Command
      */
     public function handle()
     {
-        $linkSubmissions = LinkSubmission::where('link_status', 'First Seen')->get();
+        $linkSubmissions = LinkSubmission::where('link_status', 'REDO')->get();
 
         foreach ($linkSubmissions as $linkSubmission) {
 
             $review = LinkSubmissionReview::setLinkSubmission($linkSubmission)->review();
 
             if ($review->isDuplicate()) {
+                $this->info('duplicate');
                 $linkSubmission->link_status = $review->getLinkStatus();
                 $linkSubmission->link_status_ref = $review->getLinkStatusRef();
+                $linkSubmission->save();
+            } else {
+                $linkSubmission->link_status = "First Seen";
                 $linkSubmission->save();
             }
 

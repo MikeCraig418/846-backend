@@ -24,6 +24,7 @@ class LinkSubmissionReview
         $this->checkModels = [
             'evidence' => ['model' => Evidence::select('*'), 'source' => 'PB2020 Data Feed'], // (1) The the pb2020 approved links
             'reviewed_links' => ['model' => ReviewedLink::select('*'), 'source' => 'model'],  // (2) other lists
+            'link_submissions' => ['model' => LinkSubmission::where('link_status', '=', 'First Seen')->select('*'), 'source' => 'Duplicate Link Submission'], // (3)
         ];
 
         $this->urls = [
@@ -36,7 +37,7 @@ class LinkSubmissionReview
 
     public function setUrls($urls = [])
     {
-        foreach ($urls as $key=>$url) {
+        foreach ($urls as $key => $url) {
             $urls[$key] = trim(strtolower($this->addhttp($url)));
         }
 
@@ -55,47 +56,46 @@ class LinkSubmissionReview
     public function review()
     {
 
+        $this->linkStatus = 'First Seen';
+
         $linkSubmission = $this->linkSubmission;
 
         $urls = $this->urls;
 
+        $patterns = [
+            'youtube' => [
+                'regex' => '/(?:youtube\.com\/(?:[^#\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^\#"&?\/\s]{11})/',
+                'regex_group' => 1,
+                'regexp' => '(youtube\.com\/([^#\/]+\/[^:]+\/|(v|e(mbed)?)\/|[^:]*[?&]v=)|youtu\.be\/)(%ID%)',
+            ],
+            'twitter' => [
+                'regex' => '/https?:\/\/twitter\.com\/(?:#!\/)?(?:\w+)\/status(es)?\/(\d+)/',
+                'regex_group' => 2,
+                'regexp' => 'https?:\/\/twitter\.com\/(#!\/)?([a-zA-Z0-9_\-]+)\/status(es)?\/(%ID%))',
+            ],
+            'video.twimg' => [
+                'regex' => '/video\.twimg\.com\/[^\/]+\/([0-9]+)/',
+                'regex_group' => 1,
+                'regexp' => 'video\.twimg\.com\/[^\/]+\/(%ID%)',
+            ],
+        ];
+
         foreach ($urls as $url) {
-//            echo "|" . $url . "|\n";
+//            echo "\n|" . $url . "|\n";
 
-            $urlParts = parse_url($url);
+            $useRegex = false;
+            $id = null;
+            $regexp = null;
 
-            $IdPattern = false;
-            $id = false;
-
-            $hosts = [];
-
-
-            if ($urlParts['host'] == 'twitter.com') {
-                $IdPattern = '/([0-9]+)/';
-                $groupNum = 0;
-                $hosts = [
-                    'twitter.com'
-                ];
-
-            } else if ($urlParts['host'] == 'youtube.com' || $urlParts['host'] == 'youtu.be') {
-                $IdPattern = '/(\.be|\.com)\/([0-9a-zA-Z\-_]+)/';
-                $groupNum = 2;
-                $hosts = [
-                    'youtube.com',
-                    'youtu.be',
-                ];
+            foreach ($patterns as $patternKey => $pattern) {
+                preg_match_all($pattern['regex'], $url, $matches, PREG_SET_ORDER, 0);
+                if ($matches) {
+                    $id = $matches[0][$pattern['regex_group']];
+                    $regexp = str_replace('%ID%', $id, $pattern['regexp']);
+                    $useRegex = true;
+                    break;
+                }
             }
-
-            if ($IdPattern) {
-
-                preg_match_all($IdPattern, $url, $matches, PREG_SET_ORDER, 0);
-
-                $id = $matches[0][$groupNum] ?? false;
-
-                if (!$id) continue;
-            }
-
-            $hosts = array_unique($hosts);
 
 
             //
@@ -122,32 +122,30 @@ class LinkSubmissionReview
 
                 $model = $checkModel['model'];
 
+                $count = 0;
+                $whereRaw = "";
                 foreach ($checkFields as $urlField) {
+                    $count++;
 
-                    $count = 0;
+                    if ($count == 1) {
+                        if (!$id) {
+                            $whereRaw .= $urlField . ' like "' . $url . '"';
+                        } else
+                            $whereRaw .= $urlField . ' regexp "' . $regexp . '"';
+                    } else {
 
-                    foreach ($hosts as $host) {
-                        $count++;
-
-                        if ($count == 1) {
-
-                            if (!$id) {
-                                $model = $model->where($urlField, 'like', '%' . $host . '%' . $id . '$');
-                            } else
-//                                echo "where($urlField, 'like', '%' . $host . '%' . $id . '$')\n";
-                                $model = $model->where($urlField, 'like', '%' . $url . '%');
-                        } else {
-
-                            if (!$id) {
-                                $model = $model->orWhere($urlField, 'like', '%' . $host . '%' . $id . '$');
-                            } else
-//                                echo "orWhere($urlField, 'like', '%' . $host . '%' . $id . '$')\n";
-                                $model = $model->orWhere($urlField, 'like', '%' . $url . '%');
-                        }
+                        if (!$id) {
+                            $whereRaw .= ' OR ' . $urlField . ' like "' . $url . '"';
+                        } else
+                            $whereRaw .= ' OR ' . $urlField . ' regexp "' . $regexp . '"';
                     }
-
                 }
+
+                $model = $model->whereRaw("( $whereRaw )");
+
                 $modelCount = $model->count();
+
+//                echo $key . ": " . $id . " count: " . $modelCount . " " . $regexp . "\n";
 
                 $model = $model->first();
 
@@ -157,7 +155,7 @@ class LinkSubmissionReview
 
                     return $this;
                 } else {
-//                        echo $modelCount;
+//                    echo $modelCount;
                 }
 
             }
@@ -181,10 +179,10 @@ class LinkSubmissionReview
         return $this->getLinkStatus() == 'Duplicate';
     }
 
-    public function addhttp($url) {
-        if  ( $ret = parse_url($url) ) {
-            if ( !isset($ret["host"]) )
-            {
+    public function addhttp($url)
+    {
+        if ($ret = parse_url($url)) {
+            if (!isset($ret["host"])) {
                 $url = "https://" . trim($url);
             }
         }
