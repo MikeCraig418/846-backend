@@ -38,7 +38,7 @@ class LinkSubmissionReview
     public function setUrls($urls = [])
     {
         foreach ($urls as $key => $url) {
-            $urls[$key] = trim(strtolower($this->addhttp($url)));
+            $urls[$key] = trim(strtolower(self::addhttp($url)));
         }
 
 
@@ -63,6 +63,15 @@ class LinkSubmissionReview
         $urls = $this->urls;
 
         $patterns = [
+
+            /*
+            'identifier' => [
+                'regex' => '', // The regex used to identify the link source and extract the ID
+                'regex_group' => 1, // The matching group of the ID
+                'regexp' => '' // The regex used to search for duplicates in the database,
+            ],
+            */
+
             'youtube' => [
                 'regex' => '/(?:youtube\.com\/(?:[^#\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^\#"&?\/\s]{11})/',
                 'regex_group' => 1,
@@ -179,13 +188,14 @@ class LinkSubmissionReview
         return $this->getLinkStatus() == 'Duplicate';
     }
 
-    public function addhttp($url)
+    public static function addhttp($url)
     {
         if ($ret = parse_url($url)) {
-            if (!isset($ret["host"])) {
+            if (!isset($ret["scheme"])) {
                 $url = "https://" . trim($url);
             }
         }
+
         return $url;
     }
 }

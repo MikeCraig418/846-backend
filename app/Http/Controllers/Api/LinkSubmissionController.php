@@ -33,7 +33,7 @@ class LinkSubmissionController extends Controller
 
         foreach ($request->data ?? [] as $row) {
             if (isset($row['submission_media_url'])) {
-                $submission_media_url = $row['submission_media_url'];
+                $submission_media_url = LinkSubmissionReview::addhttp($row['submission_media_url']);
             } else {
                 $errors[] = $row;
                 continue;
@@ -41,7 +41,7 @@ class LinkSubmissionController extends Controller
 
             $submission_url = '';
             if (isset($row['submission_url'])) {
-                $submission_url = $row['submission_url'];
+                $submission_url = LinkSubmissionReview::addhttp($row['submission_url']);
             }
 
             $review = LinkSubmissionReview::setUrls([
