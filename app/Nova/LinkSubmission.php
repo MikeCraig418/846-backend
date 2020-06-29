@@ -7,6 +7,7 @@ use App\Nova\Actions\ApproveSubmission;
 use App\Nova\Actions\BulkUploadLinks;
 use App\Nova\Actions\NeedsApprovers;
 use App\Nova\Actions\RejectSubmission;
+use App\Nova\Actions\SendToGithub;
 use App\Nova\Filters\ApprovalStatus;
 use App\Nova\Filters\LinkStatus;
 use Illuminate\Http\Request;
@@ -155,6 +156,7 @@ class LinkSubmission extends Resource
                 ->canRun(function () {
                     return auth()->user()->hasPermissionTo('view link submissions');
                 }),
+            (new SendToGithub())
 
         ];
     }
