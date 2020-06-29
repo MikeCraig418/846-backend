@@ -167,8 +167,45 @@ composer install
 
 php artisan migrate
 
-php artisan serve
+php artisan key:generate
+
+php artisan nova:user # Create a user account
+
 ```
+
+### MySQL DB Seed
+```
+# Add some Roles into MySQL
+
+INSERT INTO `roles` (`id`, `slug`, `name`, `created_at`, `updated_at`)
+VALUES
+	(1, 'link-submission-manager', 'Link Submission Manager', '2020-06-09 22:32:43', '2020-06-09 22:32:43'),
+	(2, 'admin', 'Admin', '2020-06-09 22:51:53', '2020-06-09 22:51:53');
+
+INSERT INTO `role_permission` (`role_id`, `permission_slug`, `created_at`, `updated_at`)
+VALUES
+	(1, 'upload link submissions', '2020-06-09 22:42:06', '2020-06-09 22:42:06'),
+	(1, 'view link submissions', '2020-06-09 22:42:06', '2020-06-09 22:42:06'),
+	(2, 'create roles', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'create users', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'delete link submissions', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'delete roles', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'delete users', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'edit link submissions', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'edit roles', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'edit users', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'upload link submissions', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'view link submissions', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'view roles', '2020-06-09 22:52:05', '2020-06-09 22:52:05'),
+	(2, 'view users', '2020-06-09 22:52:05', '2020-06-09 22:52:05');
+
+INSERT INTO `role_user` (`role_id`, `user_id`, `created_at`, `updated_at`)
+VALUES
+	(1, 'YOUR_USER_ID_FROM_USERS_TABLE', NULL, NULL),
+	(2, 'YOUR_USER_ID_FROM_USERS_TABLE', NULL, NULL);
+```
+
+Now run `php artisan serve`
 
 ### Optional
 
