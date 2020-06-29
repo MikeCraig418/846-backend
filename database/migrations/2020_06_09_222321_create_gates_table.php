@@ -27,8 +27,6 @@ class CreateGatesTable extends Migration
 
             $table->primary(['role_id', 'permission_slug']);
 
-            $table->foreign(['role_id', 'role_id', 'role_id', 'role_id', 'role_id'], 'role_permission_role_id_foreign')->references(['id', 'id', 'id', 'id', 'id'])->on('roles')->onDelete('CASCADE
-')->onUpdate('RESTRICT');
 
         });
 
@@ -38,9 +36,6 @@ class CreateGatesTable extends Migration
             $table->nullableTimestamps();
 
 
-
-            $table->foreign(['role_id', 'role_id', 'role_id', 'role_id', 'role_id'], 'role_user_role_id_foreign')->references(['id', 'id', 'id', 'id', 'id'])->on('roles')->onDelete('CASCADE
-')->onUpdate('RESTRICT');
 
         });
     }
