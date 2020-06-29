@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Incidents;
 
 use App\Models\Incident;
 use Illuminate\Console\Command;

@@ -140,7 +140,91 @@ Data Aggregation
 Data Management
 - [ ] *Is there value in a CRM?*
 
+# Developer Notes
 
+So you want to contribute or build this locally?
+
+## Installation
+
+```
+git clone https://github.com/949mac/846-backend
+
+cd 846-backend
+
+# Create a MySQL database, and then
+
+cp .env.example .env
+
+# Upate the MySQL settings in .env
+
+composer install
+
+# This application uses Laravel Nova. 
+# It will ask you for Nova credentials.
+# Before running `composer install`, 
+# you can remove references to `laravel/nova` 
+# from the composer.json file
+
+php artisan migrate
+
+php artisan serve
+```
+
+### Optional
+
+
+1. Geocoding - https://developers.google.com/maps/documentation/geocoding/start and then update `GOOGLE_MAPS_GEOCODING_API_KEY` in .env
+2. Importing Videos - https://rapidapi.com/ then update `RAPIDAPI_KEY` in .env
+
+### Console Commands
+
+**Incidents**
+
+Import the data from the https://raw.githubusercontent.com/2020PB/police-brutality/data_build/all-locations.json feed
+
+`php artisan pb:import-incidents`
+
+Traverse the feed and find the links for the videos
+
+`php artisan pb:import-video`
+
+Fetch the GEOs for new Incidents 
+
+`php artisan pb:update-lat-long`
+
+**Incidents -- Helper Commands **
+
+Truncate the incidents table and import again
+
+`php artisan pb:redo-import`
+
+Run important and geo
+
+`php artisan pb:run-import`
+
+**CDN**
+
+Dump the cache
+
+`php artisan cdn:purge-cache`
+
+**Link Submission Helper**
+
+Link Submission Review - Run manually
+
+`link-submission:batch-review`
+
+### Other helpful commands
+
+These commands are used frequently while debugging
+```
+`php artisan dump` in the terminal with dump() in the source code
+
+php artisan optimize # clear cache
+
+composer dump-autoload
+
+```
 ## Commit message conventions
 ```
 <type>(<scope>): <subject>
