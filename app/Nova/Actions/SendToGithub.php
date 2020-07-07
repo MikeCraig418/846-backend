@@ -59,7 +59,7 @@ class SendToGithub extends Action {
 		}
 		foreach ($models as $model) {
 			$submission = $model->data;
-			$this->Send($submission['city'], $submission['state'], $submission['description'], $submission['tags'], $submission['links'], $submission['title'], $submission['date']);
+			$this->Send($submission['city'], $submission['state'], $submission['description'], $submission['tags'], $submission['links'], $submission['title'], $submission['date'], $submission['user_id']);
 		}
 	}
 
@@ -76,7 +76,7 @@ class SendToGithub extends Action {
 		return !array_key_exists($field, $data) || is_null($data[$field]) || $data[$field] == '';
 	}
 
-	public function Send(string $city, string $state, string $description, string $tags, string $links_str, string $title, string $date) {
+	public function Send(string $city, string $state, string $description, string $tags, string $links_str, string $title, string $date, string $laravel_user_id) {
 		//Retrieve the name input field
 		$links = preg_split("/,/", $links_str);
 
@@ -84,11 +84,8 @@ class SendToGithub extends Action {
 		$repo_name = config('846.link_submission_github_repo_name');
 		$username = config('846.github_username');
 		$branch = config('846.link_submission_github_branch');
-		dump(config('846'));
-		dump($repo_owner);
-		dump($username);
 		// TODO: reflect actual Laravel user
-		$commit_message = 'Approved from Laravel by user YYYY';
+		$commit_message = 'Approved from Laravel by user id' . $laravel_user_id;
 
 		$md_file_path = $this->makeStateFileName($state);
 
