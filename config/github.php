@@ -40,57 +40,10 @@ return [
 
 	'connections' => [
 
-		'main' => [
-			'method' => 'token',
-			'token' => 'your-token',
-			// 'backoff'    => false,
-			// 'cache'      => false,
-			// 'version'    => 'v3',
-			// 'enterprise' => false,
-		],
-
-		'app' => [
-			'method' => 'application',
-			'clientId' => 'your-client-id',
-			'clientSecret' => 'your-client-secret',
-			// 'backoff'      => false,
-			// 'cache'        => false,
-			// 'version'      => 'v3',
-			// 'enterprise'   => false,
-		],
-
-		'jwt' => [
-			'method' => 'jwt',
-			'token' => 'your-jwt-token',
-			// 'backoff'      => false,
-			// 'cache'        => false,
-			// 'version'      => 'v3',
-			// 'enterprise'   => false,
-		],
-
-		'private' => [
-			'method' => 'private',
-			'appId' => 'your-github-app-id',
-			'keyPath' => 'your-private-key-path',
-			// 'key'        => 'your-private-key-content',
-			// 'backoff'    => false,
-			// 'cache'      => false,
-			// 'version'    => 'v3',
-			// 'enterprise' => false,
-		],
-
 		'password' => [
 			'method' => 'password',
-			'username' => 'your-username',
-			'password' => 'your-password',
-			// 'backoff'    => false,
-			// 'cache'      => false,
-			// 'version'    => 'v3',
-			// 'enterprise' => false,
-		],
-
-		'none' => [
-			'method' => 'none',
+			'username' => env('GITHUB_USERNAME', ''),
+			'password' => env('GITHUB_PASSWORD', ''),
 			// 'backoff'    => false,
 			// 'cache'      => false,
 			// 'version'    => 'v3',

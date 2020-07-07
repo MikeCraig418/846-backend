@@ -80,12 +80,15 @@ class SendToGithub extends Action {
 		//Retrieve the name input field
 		$links = preg_split("/,/", $links_str);
 
-		// TODO: make these configurable
-		$repo_owner = 'jmc91';
-		$repo_name = 'police-brutality';
-		$username = 'jmc91';
+		$repo_owner = config('846.link_submission_github_repo_owner');
+		$repo_name = config('846.link_submission_github_repo_name');
+		$username = config('846.github_username');
+		$branch = config('846.link_submission_github_branch');
+		dump(config('846'));
+		dump($repo_owner);
+		dump($username);
+		// TODO: reflect actual Laravel user
 		$commit_message = 'Approved from Laravel by user YYYY';
-		$branch = 'laravel-approvals';
 
 		$md_file_path = $this->makeStateFileName($state);
 
@@ -165,7 +168,7 @@ class SendToGithub extends Action {
 		$id_incident = $this->buildIDIncident($state_abbrev, $clean_city, $current_max_id + 1);
 		$new_incident = view('incident-template', ['title' => $title, 'date' => $date, 'description' => $description, 'tags' => $tags, 'links' => $links, 'id' => $id_incident]);
 
-		$new_incidents_blob = $incidents_blob . $new_incident;
+		$new_incidents_blob = $incidents_blob . strval($new_incident);
 		// overwrite existing entry for this city
 		$cities[$request_city_index] = $new_incidents_blob;
 		return implode($cities);
