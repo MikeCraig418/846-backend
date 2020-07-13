@@ -23,43 +23,43 @@ class SendToGithub extends Action {
 	public function handle(ActionFields $fields, Collection $models) {
 		// validate that all LinkSubmissions have required fields in a separate loop
 		// so that we do not get partial submissions
-		foreach ($models as $model) {
-			$submission = $model->data;
-			if ($this->isFieldInvalid($submission, 'title')) {
+		$this->validStates = config('846.valid_states');
+		foreach ($models as $submission) {
+			if ($this->isFieldInvalid($submission, 'github_title')) {
 				return Action::danger("You must give the submission a title");
 			}
-			if ($this->isFieldInvalid($submission, 'description')) {
+			if ($this->isFieldInvalid($submission, 'github_description')) {
 				return Action::danger("You must give the submission a description");
 
 			}
-			if ($this->isFieldInvalid($submission, 'links')) {
+			if ($this->isFieldInvalid($submission, 'github_links')) {
 				return Action::danger("You must give the submission links");
 
 			}
-			if ($this->isFieldInvalid($submission, 'tags')) {
+			if ($this->isFieldInvalid($submission, 'github_tags')) {
 				return Action::danger("You must give the submission tags");
 
 			}
-			if ($this->isFieldInvalid($submission, 'state')) {
+			if ($this->isFieldInvalid($submission, 'github_state')) {
 				return Action::danger("You must give the submission a state");
 
 			}
 			// ok a state was entered, but is it a valid state
-			if ($this->isFieldInvalid($this->stateMapping, $submission['state'])) {
-				return Action::danger("The provided state must be a valid US state abbreviation");
-
+			if ($this->isInValidState($submission['github_state'])) {
+				return Action::danger("The provided state " . $submission['github_state'] . " must be a valid US state abbreviation");
 			}
-			if ($this->isFieldInvalid($submission, 'city')) {
+
+			if ($this->isFieldInvalid($submission, 'github_city')) {
 				return Action::danger("You must give the submission a city");
 
 			}
-			if ($this->isFieldInvalid($submission, 'date')) {
-				return Action::danger("You must give the submission a date.  Include 'believed to be' if unsure");
+			if ($submission['github_date'] == null || strtotime($submission['github_date']->jsonSerialize()) == false) {
+				return Action::danger("You must give a valid date");
 			}
 		}
-		foreach ($models as $model) {
-			$submission = $model->data;
-			$this->Send($submission['city'], $submission['state'], $submission['description'], $submission['tags'], $submission['links'], $submission['title'], $submission['date'], $submission['user_id']);
+		foreach ($models as $submission) {
+			$date = $this->formatDate($submission['github_date']->jsonSerialize(), $submission['uncertain_github_date']);
+			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date, $submission->data['user_id']);
 		}
 	}
 
@@ -72,19 +72,33 @@ class SendToGithub extends Action {
 		return [];
 	}
 
-	private function isFieldInvalid(array $data, string $field): bool {
-		return !array_key_exists($field, $data) || is_null($data[$field]) || $data[$field] == '';
+	private function isFieldInvalid(object $data, string $field): bool {
+		return !isset($field, $data) || $data[$field] == '';
+	}
+
+	private function isInValidState(string $state_abbrev): bool {
+		return !array_key_exists($state_abbrev, $this->validStates) || is_null($state_abbrev) || $this->validStates[$state_abbrev] == '';
+
+	}
+
+	private function formatDate(string $date_from_illuminate_carbon, bool $is_date_uncertain): string{
+		$raw_date = explode("T", $date_from_illuminate_carbon)[0];
+		$date = date_create($raw_date);
+		$formatted_date = date_format($date, "F jS");
+		if ($is_date_uncertain) {
+			$formatted_date = "(believed to be) " . $formatted_date;
+		}
+		return $formatted_date;
 	}
 
 	public function Send(string $city, string $state, string $description, string $tags, string $links_str, string $title, string $date, string $laravel_user_id) {
 		//Retrieve the name input field
-		$links = preg_split("/,/", $links_str);
+		$links = explode(",", $links_str);
 
 		$repo_owner = config('846.link_submission_github_repo_owner');
 		$repo_name = config('846.link_submission_github_repo_name');
 		$username = config('846.github_username');
 		$branch = config('846.link_submission_github_branch');
-		// TODO: reflect actual Laravel user
 		$commit_message = 'Approved from Laravel by user id' . $laravel_user_id;
 
 		$md_file_path = $this->makeStateFileName($state);
@@ -117,7 +131,7 @@ class SendToGithub extends Action {
 	}
 
 	private function makeStateFileName(string $city_abbreviation): string{
-		$full_state_name = $this->stateMapping[$city_abbreviation];
+		$full_state_name = $this->validStates[$city_abbreviation];
 		return 'reports/' . $full_state_name . '.md';
 	}
 
@@ -162,7 +176,8 @@ class SendToGithub extends Action {
 		}
 
 		$current_max_id = $this->getMaxIDIncident($incidents_blob);
-		$id_incident = $this->buildIDIncident($state_abbrev, $clean_city, $current_max_id + 1);
+		$new_max_id = $current_max_id + 1;
+		$id_incident = $this->buildIDIncident($state_abbrev, $clean_city, $new_max_id);
 		$new_incident = view('incident-template', ['title' => $title, 'date' => $date, 'description' => $description, 'tags' => $tags, 'links' => $links, 'id' => $id_incident]);
 
 		$new_incidents_blob = $incidents_blob . strval($new_incident);
@@ -190,66 +205,12 @@ class SendToGithub extends Action {
 		$max_id = 0;
 		preg_match_all('/^id: (.*)$/m', $incidents, $id_match);
 		foreach ($id_match[0] as $id) {
-			$id_num = intval(preg_split('/-/', $id)[2]);
+			$id_num = intval(explode('-', $id)[2]);
 			if ($id_num > $max_id) {
 				$max_id = $id_num;
 			}
 		}
 		return $max_id;
 	}
-
-	private $stateMapping = [
-		'AL' => 'Alabama',
-		'AK' => 'Alaska',
-		'AZ' => 'Arizona',
-		'AR' => 'Arkansas',
-		'CA' => 'California',
-		'CO' => 'Colorado',
-		'CT' => 'Connecticut',
-		'DE' => 'Delaware',
-		'DC' => 'Washington DC',
-		'FL' => 'Florida',
-		'GA' => 'Georgia',
-		'HI' => 'Hawaii',
-		'ID' => 'Idaho',
-		'IL' => 'Illinois',
-		'IN' => 'Indiana',
-		'IA' => 'Iowa',
-		'KS' => 'Kansas',
-		'KY' => 'Kentucky',
-		'LA' => 'Louisiana',
-		'ME' => 'Maine',
-		'MD' => 'Maryland',
-		'MA' => 'Massachusetts',
-		'MI' => 'Michigan',
-		'MN' => 'Minnesota',
-		'MS' => 'Mississippi',
-		'MO' => 'Missouri',
-		'MT' => 'Montana',
-		'NE' => 'Nebraska',
-		'NV' => 'Nevada',
-		'NH' => 'New Hampshire',
-		'NJ' => 'New Jersey',
-		'NM' => 'New Mexico',
-		'NY' => 'New York',
-		'NC' => 'North Carolina',
-		'ND' => 'North Dakota',
-		'OH' => 'Ohio',
-		'OK' => 'Oklahoma',
-		'OR' => 'Oregon',
-		'PA' => 'Pennsylvania',
-		'RI' => 'Rhode Island',
-		'SC' => 'South Carolina',
-		'SD' => 'South Dakota',
-		'TN' => 'Tennessee',
-		'TX' => 'Texas',
-		'UT' => 'Utah',
-		'VT' => 'Vermont',
-		'VA' => 'Virginia',
-		'WA' => 'Washington',
-		'WV' => 'West Virginia',
-		'WI' => 'Wisconsin',
-		'WY' => 'Wyoming',
-	];
 
 }
