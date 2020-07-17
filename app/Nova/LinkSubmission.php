@@ -2,23 +2,26 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\AdvancedDuplicateCheck;
-use App\Nova\Actions\ApproveSubmission;
 use App\Nova\Actions\BulkUploadLinks;
 use App\Nova\Actions\NeedsApprovers;
-use App\Nova\Actions\RejectSubmission;
+use App\Nova\Actions\SendToGithub;
 use App\Nova\Filters\ApprovalStatus;
 use App\Nova\Filters\LinkStatus;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use Maatwebsite\LaravelNovaExcel\Actions\DownloadExcel;
 use OptimistDigital\NovaNotesField\NotesField;
+use Superlatif\NovaTagInput\Tags;
 
 class LinkSubmission extends Resource
 {
@@ -49,7 +52,7 @@ class LinkSubmission extends Resource
     public static $search = [
         'submission_title',
         'submission_media_url',
-        'submission_url'
+        'submission_url',
     ];
 
     /**
@@ -69,6 +72,84 @@ class LinkSubmission extends Resource
 
                 return $html;
             })->asHtml(),
+
+            new Panel('Github', [
+
+                Text::make('Github Title')->hideFromIndex(),
+                Text::make('Github Description')->hideFromIndex(),
+                Text::make('Github Links (comma separated if multiple)', 'github_links')->hideFromIndex(),
+                Tags::make('Github Tags', 'github_tags')
+                    ->help("Press ENTER to add tag")
+                    ->placeholder("Add a new tag")
+                    ->allowEditTags(true)
+                    ->addOnKeys([13, ':', ';', ','])
+                    ->autocompleteItems([
+                        'abuse-of-power',
+                        'arrest',
+                        'baton',
+                        'batons',
+                        'bean-bag',
+                        'bean-bags',
+                        'beat',
+                        'body-cams',
+                        'bystander',
+                        'child',
+                        'choke',
+                        'death',
+                        'drive',
+                        'flashbang',
+                        'flashbangs',
+                        'grab',
+                        'gun',
+                        'headlock',
+                        'hide-badge',
+                        'homeless',
+                        'horse',
+                        'incitement',
+                        'inhumane-treatment',
+                        'journalist',
+                        'kick',
+                        'knee',
+                        'knee-on-kneck',
+                        'knee-on-neck',
+                        'medic',
+                        'neck',
+                        'pepper-ball',
+                        'pepper-spray',
+                        'person-with-disability',
+                        'pinned',
+                        'politician',
+                        'pregnant',
+                        'projectile',
+                        'projectiles',
+                        'property-destruction',
+                        'protestor',
+                        'punch',
+                        'push',
+                        'racial-profiling',
+                        'real-bullets',
+                        'rubber-bullet',
+                        'rubber-bullets',
+                        'shield',
+                        'shields',
+                        'shoot',
+                        'shove',
+                        'spray',
+                        'strike',
+                        'tackle',
+                        'tear-gas',
+                        'tear-gas-canister',
+                        'threaten',
+                        'throw',
+                        'vehicle',
+                        'zip-ties'
+                    ])->hideFromIndex(),
+                Select::make('Github State')->options(config('846.valid_states'))->hideFromIndex(),
+                Text::make('Github City')->hideFromIndex(),
+                Date::make('Github Date', 'github_date')->hideFromIndex(),
+                Boolean::make('Check if Github Date is uncertain', 'uncertain_github_date')->hideFromIndex(),
+
+            ]),
             Text::make('Link Status')->sortable(),
             Text::make('Link Status Ref')->onlyOnDetail(),
             Text::make('Approval Status', function () {
@@ -78,10 +159,16 @@ class LinkSubmission extends Resource
             BelongsTo::make('Submitted By', 'user', User::class)->sortable()->hideFromIndex(),
             KeyValue::make('Data'),
 
-            NotesField::make('Notes')
-                ->placeholder('Add a note'), // Optional
 
-            HasMany::make('Approvals', 'link_submission_approvals', LinkSubmissionApproval::class)
+            new Panel('Notes', [
+
+                NotesField::make('', 'notes')
+                    ->placeholder('Add a note'), // Optional
+
+            ]),
+
+
+            HasMany::make('Approvals', 'link_submission_approvals', LinkSubmissionApproval::class),
         ];
     }
 
@@ -133,17 +220,17 @@ class LinkSubmission extends Resource
             (new BulkUploadLinks())->withMeta([
                 'detachedAction' => true,
                 'label' => 'Bulk Upload Links',
-                'showOnIndexToolbar' => true
+                'showOnIndexToolbar' => true,
             ]),
 //            (new AdvancedDuplicateCheck())->withMeta([
-//                'detachedAction' => true,
-//                'label' => 'Advanced Duplicate Check',
-//                'showOnIndexToolbar' => true
-//            ])->confirmText('Running this script will perform advanced matching on Twitter and YouTube URLs. You should only do this one time after you perform a new bulk import.'),
+            //                'detachedAction' => true,
+            //                'label' => 'Advanced Duplicate Check',
+            //                'showOnIndexToolbar' => true
+            //            ])->confirmText('Running this script will perform advanced matching on Twitter and YouTube URLs. You should only do this one time after you perform a new bulk import.'),
             (new DownloadExcel())->withMeta([
                 'detachedAction' => true,
                 'label' => 'Download All',
-                'showOnIndexToolbar' => true
+                'showOnIndexToolbar' => true,
             ])
                 ->withHeadings()
                 ->allFields()->except('media_url'),
@@ -155,6 +242,7 @@ class LinkSubmission extends Resource
                 ->canRun(function () {
                     return auth()->user()->hasPermissionTo('view link submissions');
                 }),
+            (new SendToGithub()),
 
         ];
     }
