@@ -59,7 +59,7 @@ class SendToGithub extends Action {
 		}
 		foreach ($models as $submission) {
 			$date = $this->formatDate($submission['github_date']->jsonSerialize(), $submission['uncertain_github_date']);
-			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date);
+			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], implode(', ', $submission['github_tags']), $submission['github_links'], $submission['github_title'], $date);
 		}
 	}
 
