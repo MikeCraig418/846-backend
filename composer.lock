@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50de4c6337f0d9b28f191dc0194dfdb2",
+    "content-hash": "79e7bdac5770c81e6abe210537b17d8d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1064,16 +1064,6 @@
                 "cache",
                 "psr16"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/graham-campbell/bounded-cache",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-04-13T13:44:36+00:00"
         },
         {
@@ -1152,16 +1142,6 @@
                 "laravel",
                 "php-github-api"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/graham-campbell/github",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-25T09:46:44+00:00"
         },
         {
@@ -1221,16 +1201,6 @@
                 "interface",
                 "laravel",
                 "manager"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/graham-campbell/manager",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-04-26T09:40:56+00:00"
         },
@@ -1487,12 +1457,6 @@
                 "gh",
                 "gist",
                 "github"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/acrobat",
-                    "type": "github"
-                }
             ],
             "time": "2020-04-25T20:36:03+00:00"
         },
@@ -1897,16 +1861,6 @@
             "keywords": [
                 "JWS",
                 "jwt"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/lcobucci",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/lcobucci",
-                    "type": "patreon"
-                }
             ],
             "time": "2020-05-22T08:21:12+00:00"
         },
@@ -4560,6 +4514,55 @@
             "time": "2020-02-18T15:10:38+00:00"
         },
         {
+            "name": "superlatif/nova-tag-input",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/superlatif-io/nova-tag-input.git",
+                "reference": "7b195da28e2568a3d759d7e8e918db23f763c298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/superlatif-io/nova-tag-input/zipball/7b195da28e2568a3d759d7e8e918db23f763c298",
+                "reference": "7b195da28e2568a3d759d7e8e918db23f763c298",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Superlatif\\NovaTagInput\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Superlatif\\NovaTagInput\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Rapin",
+                    "email": "simon@superlatif.io",
+                    "homepage": "https://superlatif.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tag input field for Laravel Nova.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2020-03-09T08:45:42+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.2.3",
             "source": {
@@ -4699,20 +4702,6 @@
                 "caching",
                 "psr6"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-09T14:15:34+00:00"
         },
         {
@@ -4770,20 +4759,6 @@
                 "interfaces",
                 "interoperability",
                 "standards"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-05-20T17:43:50+00:00"
         },
@@ -5553,20 +5528,6 @@
                 "config",
                 "configuration",
                 "options"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-05-23T13:08:13+00:00"
         },
@@ -6690,20 +6651,6 @@
                 "hydrate",
                 "instantiate",
                 "serialize"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-06-07T15:42:22+00:00"
         },
@@ -8986,6 +8933,5 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

@@ -31,6 +31,7 @@ class LinkSubmission extends Model {
 		'data' => 'array',
 		'submission_datetime_utc' => 'date',
 		'github_date' => 'date',
+		'github_tags' => 'array',
 	];
 
 	protected $appends = [

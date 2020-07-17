@@ -28,6 +28,7 @@
         "php-http/guzzle6-adapter": "^2.0",
         "pktharindu/nova-permissions": "^2.1",
         "spatie/geocoder": "^3.8",
+        "superlatif/nova-tag-input": "^1.2",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
