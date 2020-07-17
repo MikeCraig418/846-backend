@@ -59,7 +59,7 @@ class SendToGithub extends Action {
 		}
 		foreach ($models as $submission) {
 			$date = $this->formatDate($submission['github_date']->jsonSerialize(), $submission['uncertain_github_date']);
-			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date, auth()->user()->id);
+			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date);
 		}
 	}
 
@@ -91,7 +91,7 @@ class SendToGithub extends Action {
 		return $formatted_date;
 	}
 
-	public function Send(string $city, string $state, string $description, string $tags, string $links_str, string $title, string $date, string $laravel_user_id) {
+	public function Send(string $city, string $state, string $description, string $tags, string $links_str, string $title, string $date) {
 		//Retrieve the name input field
 		$links = explode(",", $links_str);
 
@@ -99,7 +99,7 @@ class SendToGithub extends Action {
 		$repo_name = config('846.link_submission_github_repo_name');
 		$username = config('846.github_username');
 		$branch = config('846.link_submission_github_branch');
-		$commit_message = 'Approved from Laravel by user id' . $laravel_user_id;
+		$commit_message = 'Approved from Laravel by user ' . auth()->user()->name;
 
 		$md_file_path = $this->makeStateFileName($state);
 
@@ -108,7 +108,6 @@ class SendToGithub extends Action {
 		$is_new_state = false;
 
 		try {
-		    dump($repo_owner, $repo_name, $md_file_path, $branch);
 			$git_resp = GitHub::repo()->Contents()->Show($repo_owner, $repo_name, $md_file_path, $branch);
 			$encoded_content = $git_resp['content'];
 			$content = base64_decode($encoded_content);
