@@ -59,7 +59,7 @@ class SendToGithub extends Action {
 		}
 		foreach ($models as $submission) {
 			$date = $this->formatDate($submission['github_date']->jsonSerialize(), $submission['uncertain_github_date']);
-			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date, $submission->data['user_id']);
+			$this->Send($submission['github_city'], $submission['github_state'], $submission['github_description'], $submission['github_tags'], $submission['github_links'], $submission['github_title'], $date, auth()->user()->id);
 		}
 	}
 
@@ -108,6 +108,7 @@ class SendToGithub extends Action {
 		$is_new_state = false;
 
 		try {
+		    dump($repo_owner, $repo_name, $md_file_path, $branch);
 			$git_resp = GitHub::repo()->Contents()->Show($repo_owner, $repo_name, $md_file_path, $branch);
 			$encoded_content = $git_resp['content'];
 			$content = base64_decode($encoded_content);
