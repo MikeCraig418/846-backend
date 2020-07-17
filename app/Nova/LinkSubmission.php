@@ -18,6 +18,7 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use Maatwebsite\LaravelNovaExcel\Actions\DownloadExcel;
 use OptimistDigital\NovaNotesField\NotesField;
 
@@ -69,15 +70,18 @@ class LinkSubmission extends Resource {
 				return $html;
 			})->asHtml(),
 
-			Text::make('Github Title'),
-			Text::make('Github Description'),
-			Text::make('Github Links (comma separated if multiple)', 'github_links'),
-			Text::make('Github Tags'),
-			Select::make('Github State')->options(config('846.valid_states')),
-			Text::make('Github City'),
-			Date::make('Github Date', 'github_date'),
-			Boolean::make('Check if Github Date is uncertain', 'uncertain_github_date'),
+            new Panel('Github', [
 
+                Text::make('Github Title'),
+                Text::make('Github Description'),
+                Text::make('Github Links (comma separated if multiple)', 'github_links'),
+                Text::make('Github Tags'),
+                Select::make('Github State')->options(config('846.valid_states')),
+                Text::make('Github City'),
+                Date::make('Github Date', 'github_date'),
+                Boolean::make('Check if Github Date is uncertain', 'uncertain_github_date'),
+
+            ]),
 			Text::make('Link Status')->sortable(),
 			Text::make('Link Status Ref')->onlyOnDetail(),
 			Text::make('Approval Status', function () {
@@ -87,10 +91,16 @@ class LinkSubmission extends Resource {
 			BelongsTo::make('Submitted By', 'user', User::class)->sortable()->hideFromIndex(),
 			KeyValue::make('Data'),
 
-			NotesField::make('Notes')
-				->placeholder('Add a note'), // Optional
 
-			HasMany::make('Approvals', 'link_submission_approvals', LinkSubmissionApproval::class),
+            new Panel('Notes', [
+
+                NotesField::make('', 'notes')
+                    ->placeholder('Add a note'), // Optional
+
+                ]),
+
+
+            HasMany::make('Approvals', 'link_submission_approvals', LinkSubmissionApproval::class),
 		];
 	}
 
