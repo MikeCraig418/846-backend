@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LinkSubmission;
+use App\Models\LinkSubmissionApproval;
 use App\User;
 use Illuminate\Http\Request;
 use N949mac\LinkSubmissionReview\Facades\LinkSubmissionReview;
@@ -31,6 +32,7 @@ class LinkSubmissionController extends Controller
 
         $errors = [];
         $count = 0;
+        $flagged_count = 0;
 
         foreach ($request->data ?? [] as $row) {
             if (isset($row['submission_media_url'])) {
@@ -58,28 +60,48 @@ class LinkSubmissionController extends Controller
                 $link_status = 'First Seen';
             }
 
-            if (!StopWords::check($row['submission_title'])) {
+            $linkSubmissionData = [
+                'submission_datetime_utc' => $row['submission_datetime_utc'] ?? '1900-01-01',
+                'submission_title' => $row['submission_title'] ?? '',
+                'submission_url' => $submission_url,
+                'submission_media_url' => $submission_media_url,
+                'data' => $row,
+                'user_id' => $user->id,
+                'link_status' => $link_status,
+                'link_status_ref' => $link_status_ref,
+                'is_api_submission' => 1,
+            ];
 
-                LinkSubmission::create([
-                    'submission_datetime_utc' => $row['submission_datetime_utc'] ?? '1900-01-01',
-                    'submission_title' => $row['submission_title'] ?? '',
-                    'submission_url' => $submission_url,
-                    'submission_media_url' => $submission_media_url,
-                    'data' => $row,
-                    'user_id' => $user->id,
-                    'link_status' => $link_status,
-                    'link_status_ref' => $link_status_ref,
-                    'is_api_submission' => 1,
-                ]);
+            $stopWordsCheck = StopWords::check($row['submission_title']);
+
+            if ($stopWordsCheck === false || $stopWordsCheck == 'Flag') {
+                $linkSubmission = LinkSubmission::create($linkSubmissionData);
+
+                if ($stopWordsCheck == 'Flag') {
+
+                    $linkSubmissionApproval = new LinkSubmissionApproval();
+                    $linkSubmissionApproval->link_submission_id = $linkSubmission->id;
+                    $linkSubmissionApproval->status = "Flag for Review";
+                    $linkSubmissionApproval->reason = "";
+                    $linkSubmissionApproval->user_id = $user->id;
+                    $linkSubmissionApproval->save();
+
+
+                    $flagged_count++;
+                }
 
                 $count++;
+            } else {
+                $errors[] = $row;
             }
 
         }
 
+        $flaggedStr = $flagged_count > 0 ? " ($flagged_count flagged)" : "";
+
         return response()->json([
             'status' => 'ok',
-            'message' => 'Successfully processed ' . $count . ' records',
+            'message' => 'Successfully processed ' . $count . $flaggedStr . ' records',
             'dropped_records' => $errors], 200);
 
         exit;

@@ -11,7 +11,7 @@ class StopWords{
         foreach ($stopWords as $stopWord) {
             if (strpos(strtolower($string), strtolower($stopWord->word)) !== false) {
                 // Contains Stop Word
-                return true;
+                return $stopWord->action;
             }
         }
 
