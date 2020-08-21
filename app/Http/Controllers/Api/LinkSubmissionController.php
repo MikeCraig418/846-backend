@@ -7,6 +7,7 @@ use App\Models\LinkSubmission;
 use App\User;
 use Illuminate\Http\Request;
 use N949mac\LinkSubmissionReview\Facades\LinkSubmissionReview;
+use N949mac\StopWords\StopWords;
 
 class LinkSubmissionController extends Controller
 {
@@ -57,18 +58,23 @@ class LinkSubmissionController extends Controller
                 $link_status = 'First Seen';
             }
 
-            LinkSubmission::create([
-                'submission_datetime_utc' => $row['submission_datetime_utc'] ?? '1900-01-01',
-                'submission_title' => $row['submission_title'] ?? '',
-                'submission_url' => $submission_url,
-                'submission_media_url' => $submission_media_url,
-                'data' => $row,
-                'user_id' => $user->id,
-                'link_status' => $link_status,
-                'link_status_ref' => $link_status_ref,
-                'is_api_submission' => 1,
-            ]);
-            $count++;
+            if (!StopWords::check($row['submission_title'])) {
+
+                LinkSubmission::create([
+                    'submission_datetime_utc' => $row['submission_datetime_utc'] ?? '1900-01-01',
+                    'submission_title' => $row['submission_title'] ?? '',
+                    'submission_url' => $submission_url,
+                    'submission_media_url' => $submission_media_url,
+                    'data' => $row,
+                    'user_id' => $user->id,
+                    'link_status' => $link_status,
+                    'link_status_ref' => $link_status_ref,
+                    'is_api_submission' => 1,
+                ]);
+
+                $count++;
+            }
+
         }
 
         return response()->json([

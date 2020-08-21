@@ -1,0 +1,49 @@
+{
+  "name": "n949mac/stop-words",
+  "description": "A stop words",
+  "license": "MIT",
+  "keywords": [
+    "stop",
+    "words"
+  ],
+  "type": "library",
+  "authors": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "illuminate/support": "^6.0|^7.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^4.0|^5.0",
+    "phpunit/phpunit": "^8.4|^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "N949mac\\StopWords\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "N949mac\\StopWords\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "phpunit": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "N949mac\\StopWords\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
