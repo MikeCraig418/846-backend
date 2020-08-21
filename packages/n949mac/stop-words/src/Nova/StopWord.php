@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Pktharindu\NovaPermissions\Role;
@@ -54,6 +55,10 @@ class StopWord extends Resource
       return [
           ID::make()->sortable(),
           Text::make('Word')->sortable(),
+          Select::make('Action')->options([
+              'Flag' => 'Flag',
+              'Drop' => 'Drop',
+          ])->sortable(),
         ];
     }
 
