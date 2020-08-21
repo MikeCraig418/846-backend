@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79e7bdac5770c81e6abe210537b17d8d",
+    "content-hash": "b371d87b6be6e7a601a7df82038c10b2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2651,7 +2651,67 @@
                 "link",
                 "review",
                 "submission"
-            ]
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "n949mac/stop-words",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/n949mac/stop-words",
+                "reference": "9de4003a5782a187bfb22f680933619c93e0eafe"
+            },
+            "require": {
+                "illuminate/support": "^6.0|^7.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0",
+                "phpunit/phpunit": "^8.4|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "N949mac\\StopWords\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "N949mac\\StopWords\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "N949mac\\StopWords\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "phpunit": [
+                    "phpunit"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "",
+                    "email": ""
+                }
+            ],
+            "description": "A stop words",
+            "keywords": [
+                "stop",
+                "words"
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "nalingia/nova-secret-field",
@@ -8065,6 +8125,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
@@ -8926,12 +8987,14 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "n949mac/link-submission-review": 20
+        "n949mac/link-submission-review": 20,
+        "n949mac/stop-words": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
