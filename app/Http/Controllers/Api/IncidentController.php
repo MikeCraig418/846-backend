@@ -41,12 +41,31 @@ class IncidentController extends Controller
         $incidents = Incident::select('*');
 
         foreach ($filterBy as $filter => $value) {
-            $incidents = $incidents->where($filter, $value);
+            if ($filter == 'tags') {
+                $values = explode(',', $value);
+                foreach ($values as $value) {
+                    $incidents = $incidents->where('tags', 'like', "%\"{$value}\"%");
+                }
+            } else {
+                $incidents = $incidents->where($filter, $value);
+            }
         }
 
         if ($request->include == 'evidence') {
             $incidents = $incidents->with('evidence.video');
         }
+
+        if ($request->sort) {
+            $sorts = explode(',', $request->sort);
+            foreach ($sorts as $sort) {
+                $sortDirection = substr($sort, 0, 1) == "-" ? "desc" : "asc";
+                $sortColumn = substr($sort,  0, 1) == "-" ? substr($sort, 1) : $sort;
+                $incidents = $incidents->orderBy($sortColumn, $sortDirection);
+            }
+        } else {
+            $incidents = $incidents->orderBy('date', 'desc');
+        }
+
 
         $incidents = $incidents->get();
 

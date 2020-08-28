@@ -42,7 +42,7 @@ class ImportIncidents extends Command
      */
     public function handle()
     {
-        $source_url = "https://raw.githubusercontent.com/2020PB/police-brutality/data_build/all-locations.json";
+        $source_url = "https://raw.githubusercontent.com/2020PB/police-brutality/data_build/all-locations-v2.json";
 
         $response = Http::get($source_url);
 
@@ -56,6 +56,11 @@ class ImportIncidents extends Command
                     continue;
                 }
 
+                $links = $row['links'];
+                $linkArr = [];
+                foreach($links as $link) {
+                    $linkArr[] = $link['url'];
+                }
                 $incident = Incident::updateOrCreate(
                     [
                         'pb_id' => $row['id'],
@@ -63,13 +68,15 @@ class ImportIncidents extends Command
                     [
                         'state' => $row['state'] ?? '',
                         'city' => $row['city'] ?? '',
+                        'tags' => $row['tags'],
                         'title' => $row['name'],
                         'date' => ($this->isValidForCarbon($row['date'])) ? $row['date'] : '1900-01-01',
-                        'links' => $row['links'],
+                        'links' => $linkArr,
                     ]
                 );
 
-                foreach ($row['links'] as $link) {
+                foreach ($linkArr as $link) {
+
                     $evidence = Evidence::updateOrCreate(
                         [
                             'url' => $link,

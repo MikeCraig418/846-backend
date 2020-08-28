@@ -26,6 +26,7 @@ class Incident extends Model
         'links',
         'lat',
         'long',
+        'tags',
     ];
 
     protected $hidden = [
@@ -45,6 +46,7 @@ class Incident extends Model
     protected $casts = [
         'date' => 'date',
         'links' => 'array',
+        'tags' => 'array',
     ];
 
     public function evidence()
