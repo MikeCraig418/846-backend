@@ -55,6 +55,13 @@ class IncidentController extends Controller
             $incidents = $incidents->with('evidence.video');
         }
 
+
+        $pageReq = $request->page ?? [];
+        foreach ($pageReq as $pageKey => $value) {
+            if ($pageKey == 'limit') { $incidents = $incidents->limit($value); }
+            if ($pageKey == 'offset') { $incidents = $incidents->offset($value); }
+        }
+
         if ($request->sort) {
             $sorts = explode(',', $request->sort);
             foreach ($sorts as $sort) {
