@@ -18,7 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('tags', '\App\Http\Controllers\Api\TagController@index');
+
 Route::get('incidents', '\App\Http\Controllers\Api\IncidentController@index');
+
 Route::get('incidents/{id}', '\App\Http\Controllers\Api\IncidentController@show');
 
 Route::get('legislators', '\App\Http\Controllers\Api\LegislatorController@index');
