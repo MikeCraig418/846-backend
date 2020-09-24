@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Scopes\LinkSubmissionScope;
+use App\Scopes\ListingAgentScope;
 use App\Traits\Uuids;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +14,7 @@ class LinkSubmission extends Model {
 	use Uuids;
 	use SoftDeletes;
 	use HasNotes;
+
 
 	public $incrementing = false;
 
@@ -37,6 +40,13 @@ class LinkSubmission extends Model {
 	protected $appends = [
 		'approved_count',
 	];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new LinkSubmissionScope());
+    }
 
 	public function user() {
 		return $this->belongsTo(User::class);
