@@ -164,7 +164,7 @@ Video
 
 Geolocation
 - [x] Artisan command to update lat/long for all Incidents
-- [ ] Automatically find lat/long on data import
+- [X] Automatically find lat/long on data import
 
 Data Aggregation
 - [ ] Continuous Integration of data via MD files from 2020PB/police-brutality

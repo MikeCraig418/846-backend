@@ -20,6 +20,7 @@ class CreatePoliceBrutalityTable extends Migration {
 			$table->string('title', 191);
 			$table->text('description')->nullable();
 			$table->text('links')->nullable();
+			$table->text('tags')->nullable();
 			$table->string('link_1', 191)->nullable();
 			$table->string('link_2', 191)->nullable();
 			$table->string('link_3', 191)->nullable();
