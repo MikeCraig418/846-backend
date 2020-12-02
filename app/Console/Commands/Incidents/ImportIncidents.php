@@ -61,6 +61,17 @@ class ImportIncidents extends Command
                 foreach($links as $link) {
                     $linkArr[] = $link['url'];
                 }
+
+                $lat = 0;
+                $long = 0;
+                $geoStr = trim($row['geolocation'] ?? '', ' ');
+                if (!empty($geoStr)) {
+                    $geoList = explode(',', $geoStr);
+                    if (count($geoList) === 2) {
+                        $lat = (float)trim($geoList[0], ' ');
+                        $long = (float)trim($geoList[1], ' ');
+                    }
+                }
                 $incident = Incident::updateOrCreate(
                     [
                         'pb_id' => $row['id'],
@@ -72,6 +83,8 @@ class ImportIncidents extends Command
                         'title' => $row['name'],
                         'date' => ($this->isValidForCarbon($row['date'])) ? $row['date'] : '1900-01-01',
                         'links' => $linkArr,
+                        'lat' => $lat,
+                        'long' => $long,
                     ]
                 );
 
